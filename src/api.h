@@ -1,7 +1,6 @@
 #ifndef API_H 
 #define API_H
 
-/*#define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com&fields=shortName,symbol,marketState,regularMarketPrice,regularMarketChange,regularMarketChangePercent,preMarketPrice,preMarketChange,preMarketChangePercent,postMarketPrice,postMarketChange,postMarketChangePercent,ebitda,marketCap,fiftyTwoWeekLow,fiftyTwoWeekHigh&symbols=AAPL,GOOG,TSLA,WORK"*/
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
 
 struct curl_fetch_st {
