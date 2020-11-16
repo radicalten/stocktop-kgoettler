@@ -92,8 +92,12 @@ void parse_stock(json_object *jobj, struct stock_data *out)
         percent = json_object_get_double(
                 json_object_object_get(jobj, "regularMarketChangePercent"));
     }
+    strcpy(out->symbol, symbol);
+    strcpy(out->state, mstate);
+    /*
     out->symbol = symbol;
     out->state = mstate;
+    */
     out->price = price;
     out->change = diff;
     out->change_perc = percent;

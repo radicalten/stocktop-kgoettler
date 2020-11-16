@@ -4,8 +4,8 @@
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
 
 struct stock_data {
-    char* symbol;
-    char* state;
+    char symbol[24];
+    char state[24];
     double open;
     double price;
     double change;
