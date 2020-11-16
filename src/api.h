@@ -6,9 +6,16 @@
 struct stock_data {
     char* symbol;
     char* state;
+    double open;
     double price;
     double change;
     double change_perc;
+    double volume;
+    double volume_avg;
+    double ebitda;
+    double market_cap;
+    double fifty_two_week_low;
+    double fifty_two_week_high;
 };
 
 struct curl_fetch_st {

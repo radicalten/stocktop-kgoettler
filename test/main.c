@@ -6,8 +6,26 @@
 int main (void)
 {
     /* Inputs */
-    char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
-    char *FIELDS[13] = {"shortName", "symbol", "marketState", "marketState", "preMarketChange", "postMarketChange", "preMarketPrice", "preMarketChangePercent", "postMarketPrice", "postMarketChangePercent", "regularMarketPrice", "regularMarketChange", "regularMarketChangePercent"};
+    char *SYMBOLS[3] = {
+        "AAPL",
+        "GOOG",
+        "TSLA"
+    };
+    char *FIELDS[13] = {
+        "shortName",
+        "symbol",
+        "marketState",
+        "marketState",
+        "preMarketChange",
+        "postMarketChange",
+        "preMarketPrice",
+        "preMarketChangePercent",
+        "postMarketPrice",
+        "postMarketChangePercent",
+        "regularMarketPrice",
+        "regularMarketChange",
+        "regularMarketChangePercent"
+    };
     
     /* Outputs */
     int res;

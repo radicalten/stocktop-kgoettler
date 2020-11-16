@@ -65,7 +65,6 @@ void parse_stock(json_object *jobj, struct stock_data *out)
             json_object_object_get(jobj, "preMarketChange"));
     postmc = json_object_get_double(
             json_object_object_get(jobj, "postMarketChange"));
-    
     if (strcmp(mstate, "PRE") && (premc != 0))
     {
         price = json_object_get_double(
@@ -98,6 +97,20 @@ void parse_stock(json_object *jobj, struct stock_data *out)
     out->price = price;
     out->change = diff;
     out->change_perc = percent;
+    out->open = json_object_get_double(
+            json_object_object_get(jobj, "regularMarketPreviousClose"));
+    out->volume = json_object_get_double(
+            json_object_object_get(jobj, "regularMarketVolume"));
+    out->volume_avg = json_object_get_double(
+            json_object_object_get(jobj, "averageDailyVolume10Day"));
+    out->ebitda = json_object_get_double(
+            json_object_object_get(jobj, "ebitda"));
+    out->market_cap = json_object_get_double(
+            json_object_object_get(jobj, "marketCap"));
+    out->fifty_two_week_low = json_object_get_double(
+            json_object_object_get(jobj, "fiftyTwoWeekLow"));
+    out->fifty_two_week_high = json_object_get_double(
+            json_object_object_get(jobj, "fiftyTwoWeekHigh"));
     return;
 }
 
