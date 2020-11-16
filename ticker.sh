@@ -27,7 +27,7 @@ SYMBOLS=(
     "TSLA"
 )
 endpoint="${URL}&fields=$(strcat "," "${FIELDS[@]}")&symbols=$(strcat "," ${SYMBOLS[@]})"
-echo $endpoint
+#echo $endpoint
 
 #curl $endpoint | jq
 

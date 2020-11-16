@@ -3,6 +3,14 @@
 
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
 
+struct stock_data {
+    char* symbol;
+    char* state;
+    double price;
+    double change;
+    double change_perc;
+};
+
 struct curl_fetch_st {
     char *payload;
     size_t size;
@@ -26,20 +34,21 @@ char* build_endpoint(int nsymbols, char **symbols, int nfields, char **fields);
  */
 int query(char *url, json_object **json);
 
+void parse_stocks(json_object *jobj, struct stock_data *out, int len);
+void parse_stock(json_object *jobj, struct stock_data *out);
+
 /**
  * Prints all stocks to the terminal. Calls print_stock on all of the
  * stocks in JSON object.
  *
  * \param jobj - a json_object returned by the Yahoo Finance API
  */
-void print_all_stocks(json_object *jobj);
 
 /**
  * Prints a single stock to the terminal.
  *
  * \param jobj - pointer to a json_object
  */
-void print_stock(json_object *jobj);
 
 /**
  * Callback for curl call

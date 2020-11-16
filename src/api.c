@@ -44,23 +44,18 @@ char* build_endpoint(int nsymbols, char **symbols, int nfields, char **fields)
     return endpoint;
 }
 
-void print_all_stocks(json_object *jobj)
+void parse_stocks(json_object *jobj, struct stock_data *out, int len)
 {
-    int len;
     json_object * jsub;
-    jsub = json_object_object_get(jobj, "quoteResponse"); 
-    jsub = json_object_object_get(jsub, "result");
-    len = json_object_array_length(jsub);
+    jsub = json_object_object_get(json_object_object_get(jobj, "quoteResponse"), "result");
     for (int i = 0; i < len; i++)
-        print_stock(json_object_array_get_idx(jsub, i));
+        parse_stock(json_object_array_get_idx(jsub, i), &out[i]);
     return;
 }
 
-void print_stock(json_object *jobj)
+void parse_stock(json_object *jobj, struct stock_data *out)
 {
-    const char *mstate, *symbol;
-    char *msign;
-    char color[12];
+    char *mstate, *symbol;
     double price, diff, percent, premc, postmc;
     symbol = json_object_get_string(
             json_object_object_get(jobj, "symbol"));
@@ -70,28 +65,27 @@ void print_stock(json_object *jobj)
             json_object_object_get(jobj, "preMarketChange"));
     postmc = json_object_get_double(
             json_object_object_get(jobj, "postMarketChange"));
-
+    
     if (strcmp(mstate, "PRE") && (premc != 0))
     {
-        msign = "*";
         price = json_object_get_double(
                 json_object_object_get(jobj, "preMarketPrice"));
         diff = premc;
         percent = json_object_get_double(
                 json_object_object_get(jobj, "preMarketChangePercent"));
     }
+    /*
     else if (~strcmp(mstate, "REGULAR") && (postmc != 0))
     {
-        msign = "*";
         price = json_object_get_double(
                 json_object_object_get(jobj, "postMarketPrice"));
         diff = postmc;
         percent = json_object_get_double(
                 json_object_object_get(jobj, "postMarketChangePercent"));
     }
+    */
     else
     {
-        msign = " ";
         price = json_object_get_double(
                 json_object_object_get(jobj, "regularMarketPrice"));
         diff = json_object_get_double(
@@ -99,11 +93,11 @@ void print_stock(json_object *jobj)
         percent = json_object_get_double(
                 json_object_object_get(jobj, "regularMarketChangePercent"));
     }
-
-    printf("%-10s%s%8.2f%s", symbol, "", price, "");
-    printf("%s%10.2f%12.2lf%% %s", color, diff, percent, "");
-    printf("%s\n", msign);
-
+    out->symbol = symbol;
+    out->state = mstate;
+    out->price = price;
+    out->change = diff;
+    out->change_perc = percent;
     return;
 }
 
