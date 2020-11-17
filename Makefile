@@ -22,12 +22,11 @@ stocktop:  $(SRCDIR)/api.o $(SRCDIR)/stocks.o
 	$(CC) $(CFLAGS) -o stocktop $(SRCDIR)/api.o $(SRCDIR)/stocks.o $(LIBS) 
 
 $(SRCDIR)/api.o:  $(SRCDIR)/api.c $(SRCDIR)/api.h
-	$(CC) $(CFLAGS) -c $(SRCDIR)/api.c -lcurl -ljson-c -o $(SRCDIR)/api.o
+	$(CC) $(CFLAGS) -c $(SRCDIR)/api.c -o $(SRCDIR)/api.o
 
 # To create the object file counter.o, we need the source files
-# counter.c and counter.h:
 #
-$(SRCDIR)/stocks.o:  $(SRCDIR)/stocks.c $(SRCDIR)/stocks.h 
+$(SRCDIR)/stocks.o:  $(SRCDIR)/stocks.c $(SRCDIR)/stocks.h $(SRCDIR)/api.o
 	$(CC) $(CFLAGS) -c $(SRCDIR)/stocks.c -o $(SRCDIR)/stocks.o
 
 # To start over from scratch, type 'make clean'.  This

@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <json-c/json.h>
-#include <curl/curl.h>
 #include "api.h"
 
 struct stock_data *fetch_stocks(char **symbols, int nsymbols)
@@ -24,13 +22,12 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
     };
 
     /* Outputs */
-    int res;
     json_object *json;
     json_object **pjson = &json;
 
     /* Build URL and perform query */
     char *url = build_endpoint(symbols, nsymbols, fields, 13);
-    res = query(url, pjson);
+    query(url, pjson);
     
     /* Parse output */
     struct stock_data *stocks = malloc(sizeof(struct stock_data) * nsymbols);
@@ -41,7 +38,6 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
     free(url);
     return stocks;
 }
-
 
 char* build_endpoint(char **symbols, int nsymbols, char **fields, int nfields)
 {

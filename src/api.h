@@ -1,5 +1,8 @@
-#ifndef API_H 
-#define API_H
+#ifndef API_H_SEEN
+#define API_H_SEEN
+
+#include <json-c/json.h>
+#include <curl/curl.h>
 
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
 
@@ -23,6 +26,12 @@ struct curl_fetch_st {
     size_t size;
 };
 
+/**
+ * Fetch stock data, given a list of stock symbols
+ *
+ * \param symbols - array of stock symbols
+ * \param nsymbols - number of symbols passed
+ */
 struct stock_data* fetch_stocks(char **symbols, int nsymbols);
 
 /**
