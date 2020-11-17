@@ -23,6 +23,8 @@ struct curl_fetch_st {
     size_t size;
 };
 
+struct stock_data* fetch_stocks(char **symbols, int nsymbols);
+
 /**
  * Build full endpiont to use in cURL call
  *
@@ -31,7 +33,7 @@ struct curl_fetch_st {
  * \param nfields - number of fields to include in query
  * \param fields - point to strings containing fields to include in query
  */
-char* build_endpoint(int nsymbols, char **symbols, int nfields, char **fields);
+char* build_endpoint(char **symbols, int nsymbols, char **fields, int nfields);
 
 /**
  * Perform full query to Yahoo Finance API
@@ -41,21 +43,23 @@ char* build_endpoint(int nsymbols, char **symbols, int nfields, char **fields);
  */
 int query(char *url, json_object **json);
 
+/**
+ * Parse a complete API request into an array of stock_data structs
+ *
+ * \param jobj - JSON result from cURL call
+ * \param out - array of stock_data structs
+ * \param len - number of stocks in JSON result (should match the length of out)
+ */
 void parse_stocks(json_object *jobj, struct stock_data *out, int len);
+
+
+/**
+ * Parse data from a single stock into a stock_data struct
+ *
+ * \param jobj - JSON result from cURL call
+ * \param out - stock_data struct in which to place output data
+ */
 void parse_stock(json_object *jobj, struct stock_data *out);
-
-/**
- * Prints all stocks to the terminal. Calls print_stock on all of the
- * stocks in JSON object.
- *
- * \param jobj - a json_object returned by the Yahoo Finance API
- */
-
-/**
- * Prints a single stock to the terminal.
- *
- * \param jobj - pointer to a json_object
- */
 
 /**
  * Callback for curl call

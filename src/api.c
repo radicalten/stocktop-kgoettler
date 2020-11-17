@@ -5,7 +5,45 @@
 #include <curl/curl.h>
 #include "api.h"
 
-char* build_endpoint(int nsymbols, char **symbols, int nfields, char **fields)
+struct stock_data *fetch_stocks(char **symbols, int nsymbols)
+{
+    char *fields[13] = {
+        "shortName",
+        "symbol",
+        "marketState",
+        "marketState",
+        "preMarketChange",
+        "postMarketChange",
+        "preMarketPrice",
+        "preMarketChangePercent",
+        "postMarketPrice",
+        "postMarketChangePercent",
+        "regularMarketPrice",
+        "regularMarketChange",
+        "regularMarketChangePercent"
+    };
+
+    /* Outputs */
+    int res;
+    json_object *json;
+    json_object **pjson = &json;
+
+    /* Build URL and perform query */
+    char *url = build_endpoint(symbols, nsymbols, fields, 13);
+    res = query(url, pjson);
+    
+    /* Parse output */
+    struct stock_data *stocks = malloc(sizeof(struct stock_data) * nsymbols);
+    parse_stocks(json, stocks, nsymbols);
+    json_object_put(json);
+    
+    /* Clean up */
+    free(url);
+    return stocks;
+}
+
+
+char* build_endpoint(char **symbols, int nsymbols, char **fields, int nfields)
 {
     /* Calculate length of fields and symbols arguments */
     int arglen = strlen(BASE_URL);
@@ -65,7 +103,7 @@ void parse_stock(json_object *jobj, struct stock_data *out)
             json_object_object_get(jobj, "preMarketChange"));
     postmc = json_object_get_double(
             json_object_object_get(jobj, "postMarketChange"));
-    if (strcmp(mstate, "PRE") && (premc != 0))
+    if ((strcmp(mstate, "PRE") == 0) && (premc != 0))
     {
         price = json_object_get_double(
                 json_object_object_get(jobj, "preMarketPrice"));
