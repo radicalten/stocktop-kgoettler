@@ -58,9 +58,8 @@ void draw (struct stock_data *stocks, int n)
     /* Print header */
     mvprintw(
             row/2 + 1,
-            col/2 - 74/2,
-            "%-5s %-5s %8s %8s %8s %8s %8s %8s %8s",
-            "",
+            col/2 - 95/2,
+            "%-5s %8s %8s %8s %8s %8s %8s %8s %8s %8s %8s",
             "",
             "OPEN",
             "PRICE", 
@@ -68,7 +67,10 @@ void draw (struct stock_data *stocks, int n)
             "CHANGE%", 
             "VOL", 
             "VOLAVG",
-            "EBITDA" );
+            "EBITDA", 
+            "MARKETCAP",
+            "52WKHI",
+            "52WKLO");
     for (int i = 0; i < n; i++)
     {
         if (stocks[i].change > 0)
@@ -77,17 +79,19 @@ void draw (struct stock_data *stocks, int n)
             attron(COLOR_PAIR(3));
         mvprintw(
                 row/2 + i + 2,
-                col/2 - 74/2,
-                "%-5s %-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s",
+                col/2 - 95/2,
+                "%-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s %9s %8.2f %8.2f",
                 stocks[i].symbol,
-                stocks[i].state,
                 stocks[i].open,
                 stocks[i].price,
                 stocks[i].change,
                 stocks[i].change_perc,
                 double_to_ss(stocks[i].volume),
                 double_to_ss(stocks[i].volume_avg),
-                double_to_ss(stocks[i].ebitda) ); 
+                double_to_ss(stocks[i].ebitda),
+                double_to_ss(stocks[i].market_cap),
+                stocks[i].fifty_two_week_low,
+                stocks[i].fifty_two_week_high ); 
         if (stocks[i].change > 0)
             attroff(COLOR_PAIR(2));
         else if (stocks[i].change < 0)
