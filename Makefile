@@ -7,38 +7,35 @@
 # for C++ define  CC = g++
 CC=gcc
 CFLAGS=-g -Wall
-LIBS=-lcurses -lcurl -ljson-c
+LIBS=-lcurses -lcurl -ljson-c -lm
 SRCDIR=src
 TESTDIR=test
+BUILDDIR=build
 
-# typing 'make' will invoke the first target entry in the file 
-# (in this case the default target entry)
-# you can name this target entry anything, but "default" or "all"
-# are the most commonly used names by convention
-#
 default: stocktop
 
-stocktop:  $(SRCDIR)/api.o $(SRCDIR)/stocks.o
-	$(CC) $(CFLAGS) -o stocktop $(SRCDIR)/api.o $(SRCDIR)/stocks.o $(LIBS) 
+stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $(BUILDDIR)/api.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o $(LIBS) 
 
-$(SRCDIR)/api.o:  $(SRCDIR)/api.c $(SRCDIR)/api.h
-	$(CC) $(CFLAGS) -c $(SRCDIR)/api.c -o $(SRCDIR)/api.o
+$(BUILDDIR)/api.o:  $(SRCDIR)/api.c $(SRCDIR)/api.h
+	$(CC) $(CFLAGS) -c $(SRCDIR)/api.c -o $(BUILDDIR)/api.o
 
-# To create the object file counter.o, we need the source files
-#
-$(SRCDIR)/stocks.o:  $(SRCDIR)/stocks.c $(SRCDIR)/stocks.h $(SRCDIR)/api.o
-	$(CC) $(CFLAGS) -c $(SRCDIR)/stocks.c -o $(SRCDIR)/stocks.o
+$(BUILDDIR)/stocks.o:  $(SRCDIR)/stocks.c $(SRCDIR)/stocks.h $(BUILDDIR)/api.o
+	$(CC) $(CFLAGS) -c $(SRCDIR)/stocks.c -o $(BUILDDIR)/stocks.o
 
-# To start over from scratch, type 'make clean'.  This
-# removes the executable file, as well as old .o object
-# files and *~ backup files:
-#
+$(BUILDDIR)/str.o: $(SRCDIR)/str.c $(SRCDIR)/str.h
+	$(CC) $(CFLAGS) -c $(SRCDIR)/str.c -o $(BUILDDIR)/str.o
+
 clean: 
 	$(RM) stocktop $(SRCDIR)/*.o *~
 	$(RM) $(TESTDIR)/*.o
+	$(RM) $(BUILDDIR)/*
 
-test : $(TESTDIR)/test.o
-	./$(TESTDIR)/test.o
+memcheck: $(BUILDDIR)/stocktop
+	valgrind --leak-check=full $(BUILDDIR)/stocktop
 
-$(TESTDIR)/test.o: $(TESTDIR)/test.c
-	$(CC) $(TESTDIR)/test.c -lcheck -Isrc/ src/api.o -lcurl -ljson-c -o $(TESTDIR)/test.o
+test : $(BUILDDIR)/test.o
+	$(BUILDDIR)/test.o
+
+$(BUILDDIR)/test.o: $(TESTDIR)/test.c $(BUILDDIR)/api.o
+	$(CC) $(TESTDIR)/test.c -lcheck -lrt -Isrc/ $(BUILDDIR)/api.o -lcurl -ljson-c -o $(BUILDDIR)/test.o
