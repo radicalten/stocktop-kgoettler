@@ -3,7 +3,79 @@
 #include <stdlib.h>
 #include <string.h>
 #include "api.h"
+#include "stocks.h"
 #include "str.h"
+
+#define MAXLEN 10
+
+char ***create_stock_table(struct stock_data *stocks, int n)
+{
+    char *buf;
+    char ***out = allocate_matrix(11, n, MAXLEN);
+    for (int i = 0; i < n; i++)
+    {
+        snprintf(out[SYMBOL][i], MAXLEN, "%-8s", stocks[i].symbol);
+        snprintf(out[OPEN][i], MAXLEN, "%8.2lf", stocks[i].open);
+        snprintf(out[PRICE][i], MAXLEN, "%8.2lf", stocks[i].price);
+        snprintf(out[CHANGE][i], MAXLEN, "%8.2lf", stocks[i].change);
+        snprintf(out[CHANGE_PERC][i], MAXLEN, "%8.2lf", stocks[i].change_perc);
+        buf = double_to_ss(stocks[i].volume);
+        snprintf(out[VOLUME][i], MAXLEN, "%8s", buf);
+        free(buf);
+        buf = double_to_ss(stocks[i].volume_avg);
+        snprintf(out[VOLUME_AVG][i], MAXLEN, "%8s", buf);
+        free(buf);
+        buf = double_to_ss(stocks[i].ebitda);
+        snprintf(out[EBITDA][i], MAXLEN, "%8s", buf);
+        free(buf);
+        buf = double_to_ss(stocks[i].market_cap);
+        snprintf(out[MARKET_CAP][i], MAXLEN, "%8s", buf);
+        free(buf);
+        snprintf(out[FIFTY_TWO_WEEK_LOW][i], MAXLEN, "%8.2lf", stocks[i].fifty_two_week_low);
+        snprintf(out[FIFTY_TWO_WEEK_HIGH][i], MAXLEN, "%8.2lf", stocks[i].fifty_two_week_high);
+    }
+    return out;
+}
+
+void destroy_stock_table(char ***matrix, int n)
+{
+    deallocate_matrix(matrix, 11, n);
+    return;
+}
+
+char ***allocate_matrix(int nrows, int ncols, int nchar) 
+{
+    int i, j;
+    char ***matrix;
+    /*  Allocate array of pointers  */
+    matrix = malloc(nrows * sizeof(char**));
+    if (matrix == NULL)
+        return NULL;
+    /*  Allocate column for each name  */
+    for (i = 0; i < nrows; i++)
+        matrix[i] = malloc(ncols * sizeof(char*));
+    if (matrix[i-1] == NULL) 
+        return NULL;
+    for (i = 0; i < nrows; i++)
+        for (j = 0; j < ncols; j++)
+            matrix[i][j] = malloc(nchar * sizeof(char));
+    if (matrix[i-1][j-1] == NULL)
+        return NULL;
+    return matrix;
+}
+
+void deallocate_matrix(char ***matrix, int nrows, int ncols)
+{
+    for (int i = 0; i < nrows; i++)
+    {
+        for (int j = 0; j < ncols; j++)
+        {
+            free(matrix[i][j]);
+        }
+        free(matrix[i]);
+    }
+    free(matrix);
+}
 
 /**
  * Setup the curses session
@@ -69,8 +141,8 @@ void draw (struct stock_data *stocks, int n)
             "VOLAVG",
             "EBITDA", 
             "MARKETCAP",
-            "52WKHI",
-            "52WKLO");
+            "52WKLO",
+            "52WKHI");
     for (int i = 0; i < n; i++)
     {
         if (stocks[i].change > 0)
@@ -98,32 +170,4 @@ void draw (struct stock_data *stocks, int n)
             attroff(COLOR_PAIR(3));
     }
     return;
-}
-
-int main (void) 
-{
-    char key;
-    start_curses();
-    /* Get data */
-    char *SYMBOLS[3] = {
-        "AAPL",
-        "GOOG",
-        "TSLA"
-    };
-    struct stock_data * stocks = fetch_stocks(SYMBOLS, 3);
-    draw(stocks, 3);
-    while ((key = getch()) != 'q')
-    {
-        switch (key)
-        {
-            default:
-                break;
-        }
-        clear();
-        draw(stocks, 3);
-        /* Redraw */
-    }
-    end_curses();
-    free(stocks);
-    return 0;
 }

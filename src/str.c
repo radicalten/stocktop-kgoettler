@@ -8,7 +8,8 @@ char* double_to_ss(double x)
     double scale;
     char label;
     /* Determine power */
-    int xpow = (int) floor(log10(x));
+
+    int xpow = (int) floor(log10(fabs(x)));
     if (xpow < 3)
     {
         label = ' ';
