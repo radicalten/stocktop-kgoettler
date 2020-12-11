@@ -2,6 +2,8 @@
 #include <curl/curl.h>
 #include <json-c/json.h>
 #include "api.h"
+#include "stocks.h"
+#include "str.h"
 
 START_TEST (test_query)
 {
@@ -63,6 +65,25 @@ START_TEST (test_print_stocks)
 }
 END_TEST
 
+START_TEST (test_stock_table)
+{
+    struct stock_data *stocks;
+    char *SYMBOLS[3] = {"AAPL", "GOOG", "WORK"};
+    stocks = fetch_stocks(SYMBOLS, 3);
+    char ***out = create_stock_table(stocks, 3);
+    for (int i = 0; i < 11; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            printf("%s ", out[i][j]);
+        }
+        printf("\n");
+    }
+    destroy_stock_table(out, 3);
+    free(stocks);
+}
+END_TEST
+
 /*
 START_TEST (test_parse_stocks)
 {
@@ -95,6 +116,7 @@ int main(void)
     tcase_add_test(tc1_1, test_build_query);
     tcase_add_test(tc1_1, test_fetch_stocks);
     tcase_add_test(tc1_1, test_print_stocks);
+    tcase_add_test(tc1_1, test_stock_table);
 
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);
