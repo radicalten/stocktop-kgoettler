@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "api.h"
+#include "str.h"
 
 /**
  * Setup the curses session
@@ -15,7 +16,9 @@ void start_curses(void)
     curs_set(0);
     keypad(stdscr, TRUE);
     start_color();
-    init_pair(1, COLOR_CYAN, COLOR_BLACK);
+    init_pair(1, COLOR_WHITE, COLOR_BLUE);
+    init_pair(2, COLOR_GREEN, COLOR_BLACK);
+    init_pair(3, COLOR_RED, COLOR_BLACK);
     return;
 }
 
@@ -31,6 +34,7 @@ void end_curses(void)
 /**
  * Sample message to draw on ncurses screen
  */
+/*
 void draw(void)
 {
     char msg[] = "This is a test.";
@@ -43,19 +47,67 @@ void draw(void)
     attroff(COLOR_PAIR(1));
     return;
 }
+*/
+
+void draw (struct stock_data *stocks, int n)
+{
+    int row, col;
+    char msg[] = "STOCKTOP";
+    getmaxyx(stdscr, row, col);
+    mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
+    /* Print header */
+    mvprintw(
+            row/2 + 1,
+            col/2 - 74/2,
+            "%-5s %-5s %8s %8s %8s %8s %8s %8s %8s",
+            "",
+            "",
+            "OPEN",
+            "PRICE", 
+            "CHANGE", 
+            "CHANGE%", 
+            "VOL", 
+            "VOLAVG",
+            "EBITDA" );
+    for (int i = 0; i < n; i++)
+    {
+        if (stocks[i].change > 0)
+            attron(COLOR_PAIR(2));
+        else if (stocks[i].change < 0)
+            attron(COLOR_PAIR(3));
+        mvprintw(
+                row/2 + i + 2,
+                col/2 - 74/2,
+                "%-5s %-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s",
+                stocks[i].symbol,
+                stocks[i].state,
+                stocks[i].open,
+                stocks[i].price,
+                stocks[i].change,
+                stocks[i].change_perc,
+                double_to_ss(stocks[i].volume),
+                double_to_ss(stocks[i].volume_avg),
+                double_to_ss(stocks[i].ebitda) ); 
+        if (stocks[i].change > 0)
+            attroff(COLOR_PAIR(2));
+        else if (stocks[i].change < 0)
+            attroff(COLOR_PAIR(3));
+    }
+    return;
+}
 
 int main (void) 
 {
     char key;
     start_curses();
-    draw();
     /* Get data */
-    char *stocks[3] = {
+    char *SYMBOLS[3] = {
         "AAPL",
         "GOOG",
         "TSLA"
     };
-    struct stock_data * data = fetch_stocks(stocks, 3);
+    struct stock_data * stocks = fetch_stocks(SYMBOLS, 3);
+    draw(stocks, 3);
     while ((key = getch()) != 'q')
     {
         switch (key)
@@ -64,10 +116,10 @@ int main (void)
                 break;
         }
         clear();
-        draw();
+        draw(stocks, 3);
         /* Redraw */
     }
     end_curses();
-    free(data);
+    free(stocks);
     return 0;
 }
