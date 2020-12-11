@@ -5,10 +5,9 @@
 
 struct stock_data *fetch_stocks(char **symbols, int nsymbols)
 {
-    char *fields[13] = {
+    char *fields[18] = {
         "shortName",
         "symbol",
-        "marketState",
         "marketState",
         "preMarketChange",
         "postMarketChange",
@@ -19,6 +18,13 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
         "regularMarketPrice",
         "regularMarketChange",
         "regularMarketChangePercent"
+        "regularMarketPreviousClose",
+        "regularMarketVolume",
+        "averageDailyVolume10Day",
+        "ebitda",
+        "marketCap",
+        "fiftyTwoWeekLow",
+        "fiftyTwoWeekHigh",
     };
 
     /* Outputs */
@@ -26,7 +32,7 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
     json_object **pjson = &json;
 
     /* Build URL and perform query */
-    char *url = build_endpoint(symbols, nsymbols, fields, 13);
+    char *url = build_endpoint(symbols, nsymbols, fields, 18);
     query(url, pjson);
     
     /* Parse output */
@@ -128,10 +134,6 @@ void parse_stock(json_object *jobj, struct stock_data *out)
     }
     strcpy(out->symbol, symbol);
     strcpy(out->state, mstate);
-    /*
-    out->symbol = symbol;
-    out->state = mstate;
-    */
     out->price = price;
     out->change = diff;
     out->change_perc = percent;
