@@ -121,13 +121,10 @@ void draw(void)
 }
 */
 
-void draw (struct stock_data *stocks, int n)
+void print_header(int row, int col)
 {
-    int row, col;
     char msg[] = "STOCKTOP";
-    getmaxyx(stdscr, row, col);
     mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
-    /* Print header */
     mvprintw(
             row/2 + 1,
             col/2 - 95/2,
@@ -143,31 +140,54 @@ void draw (struct stock_data *stocks, int n)
             "MARKETCAP",
             "52WKLO",
             "52WKHI");
+    return;
+}
+
+void print_stock(struct stock_data *stock, int line, int row, int col)
+{
+    char *volume, *volume_avg, *ebitda, *market_cap;
+    if (stock->change > 0)
+        attron(COLOR_PAIR(2));
+    else if (stock->change < 0)
+        attron(COLOR_PAIR(3));
+    // string conversion
+    volume = double_to_ss(stock->volume);
+    volume_avg = double_to_ss(stock->volume_avg);
+    ebitda = double_to_ss(stock->ebitda);
+    market_cap = double_to_ss(stock->market_cap); 
+    mvprintw(
+            row/2 + line + 2,
+            col/2 - 95/2,
+            "%-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s %9s %8.2f %8.2f",
+            stock->symbol,
+            stock->open,
+            stock->price,
+            stock->change,
+            stock->change_perc,
+            volume,
+            volume_avg,
+            ebitda,
+            market_cap,
+            stock->fifty_two_week_low,
+            stock->fifty_two_week_high ); 
+    free(volume);
+    free(volume_avg);
+    free(ebitda);
+    free(market_cap);
+    if (stock->change > 0)
+        attroff(COLOR_PAIR(2));
+    else if (stock->change < 0)
+        attroff(COLOR_PAIR(3));
+    return;
+}
+
+
+void draw (struct stock_data *stocks, int n)
+{
+    int row, col;
+    getmaxyx(stdscr, row, col);
+    print_header(row, col);
     for (int i = 0; i < n; i++)
-    {
-        if (stocks[i].change > 0)
-            attron(COLOR_PAIR(2));
-        else if (stocks[i].change < 0)
-            attron(COLOR_PAIR(3));
-        mvprintw(
-                row/2 + i + 2,
-                col/2 - 95/2,
-                "%-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s %9s %8.2f %8.2f",
-                stocks[i].symbol,
-                stocks[i].open,
-                stocks[i].price,
-                stocks[i].change,
-                stocks[i].change_perc,
-                double_to_ss(stocks[i].volume),
-                double_to_ss(stocks[i].volume_avg),
-                double_to_ss(stocks[i].ebitda),
-                double_to_ss(stocks[i].market_cap),
-                stocks[i].fifty_two_week_low,
-                stocks[i].fifty_two_week_high ); 
-        if (stocks[i].change > 0)
-            attroff(COLOR_PAIR(2));
-        else if (stocks[i].change < 0)
-            attroff(COLOR_PAIR(3));
-    }
+        print_stock(&stocks[i], i, row, col);
     return;
 }
