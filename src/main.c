@@ -9,25 +9,40 @@
 int main (void) 
 {
     char key;
+    int currow = 0;
     start_curses();
     /* Get data */
-    char *SYMBOLS[3] = {
+    int nsymbols = 4;
+    char *SYMBOLS[] = {
         "AAPL",
         "GOOG",
-        "TSLA"
+        "TSLA",
+        "WORK"
     };
-    struct stock_data * stocks = fetch_stocks(SYMBOLS, 3);
-    draw(stocks, 3);
+    struct stock_data * stocks = fetch_stocks(SYMBOLS, nsymbols);
+    draw(stocks, nsymbols, 0);
     while ((key = getch()) != 'q')
     {
         switch (key)
         {
+            case ('k'):
+            case (KEY_UP):
+                currow -= 1;
+                if (currow < 0)
+                    currow = 0;
+                break;
+            case ('j'):
+            case (KEY_DOWN):
+                currow += 1;
+                if (currow > (nsymbols-1))
+                    currow = nsymbols - 1;
+                break;
             default:
                 break;
         }
         clear();
         /* Redraw */
-        draw(stocks, 3);
+        draw(stocks, nsymbols, currow);
     }
     end_curses();
     free(stocks);

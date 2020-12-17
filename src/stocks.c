@@ -88,9 +88,14 @@ void start_curses(void)
     curs_set(0);
     keypad(stdscr, TRUE);
     start_color();
+    /* Standard colors */
     init_pair(1, COLOR_WHITE, COLOR_BLUE);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
     init_pair(3, COLOR_RED, COLOR_BLACK);
+    /* Highlighted colors */
+    init_pair(4, COLOR_BLUE, COLOR_WHITE);
+    init_pair(5, COLOR_BLACK, COLOR_GREEN);
+    init_pair(6, COLOR_BLACK, COLOR_RED);
     return;
 }
 
@@ -143,13 +148,23 @@ void print_header(int row, int col)
     return;
 }
 
-void print_stock(struct stock_data *stock, int line, int row, int col)
+void print_stock(struct stock_data *stock, int line, int row, int col, int highlight)
 {
     char *volume, *volume_avg, *ebitda, *market_cap;
     if (stock->change > 0)
-        attron(COLOR_PAIR(2));
+    {
+        if (!highlight)
+            attron(COLOR_PAIR(2));
+        else
+            attron(COLOR_PAIR(5));
+    }
     else if (stock->change < 0)
-        attron(COLOR_PAIR(3));
+    {
+        if (!highlight)
+            attron(COLOR_PAIR(3));
+        else
+            attron(COLOR_PAIR(6));
+    }
     // string conversion
     volume = double_to_ss(stock->volume);
     volume_avg = double_to_ss(stock->volume_avg);
@@ -175,19 +190,34 @@ void print_stock(struct stock_data *stock, int line, int row, int col)
     free(ebitda);
     free(market_cap);
     if (stock->change > 0)
-        attroff(COLOR_PAIR(2));
+    {
+        if (!highlight)
+            attroff(COLOR_PAIR(2));
+        else
+            attroff(COLOR_PAIR(5));
+    }
     else if (stock->change < 0)
-        attroff(COLOR_PAIR(3));
+    {
+        if (!highlight)
+            attroff(COLOR_PAIR(3));
+        else
+            attroff(COLOR_PAIR(6));
+    }
     return;
 }
 
 
-void draw (struct stock_data *stocks, int n)
+void draw (struct stock_data *stocks, int n, int currow)
 {
     int row, col;
     getmaxyx(stdscr, row, col);
     print_header(row, col);
     for (int i = 0; i < n; i++)
-        print_stock(&stocks[i], i, row, col);
+    {
+        if (i == currow)
+            print_stock(&stocks[i], i, row, col, 1);
+        else
+            print_stock(&stocks[i], i, row, col, 0);
+    }
     return;
 }
