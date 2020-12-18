@@ -10,7 +10,6 @@ int main (void)
 {
     char key;
     int currow = 0;
-    start_curses();
     /* Get data */
     int nsymbols = 4;
     char *SYMBOLS[] = {
@@ -20,6 +19,8 @@ int main (void)
         "WORK"
     };
     struct stock_data * stocks = fetch_stocks(SYMBOLS, nsymbols);
+    /* Start interactive curses session */
+    start_curses();
     draw(stocks, nsymbols, 0);
     while ((key = getch()) != 'q')
     {
