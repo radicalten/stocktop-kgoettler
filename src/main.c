@@ -8,7 +8,7 @@
 
 int main (void) 
 {
-    char key;
+    int key;
     int currow = 0;
     /* Get data */
     int nsymbols = 4;
