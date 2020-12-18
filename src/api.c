@@ -5,7 +5,7 @@
 
 struct stock_data *fetch_stocks(char **symbols, int nsymbols)
 {
-    char *fields[18] = {
+    char *fields[19] = {
         "shortName",
         "symbol",
         "marketState",
@@ -17,7 +17,7 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
         "postMarketChangePercent",
         "regularMarketPrice",
         "regularMarketChange",
-        "regularMarketChangePercent"
+        "regularMarketChangePercent",
         "regularMarketPreviousClose",
         "regularMarketVolume",
         "averageDailyVolume10Day",
@@ -32,7 +32,7 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
     json_object **pjson = &json;
 
     /* Build URL and perform query */
-    char *url = build_endpoint(symbols, nsymbols, fields, 18);
+    char *url = build_endpoint(symbols, nsymbols, fields, 19);
     query(url, pjson);
     
     /* Parse output */
