@@ -15,7 +15,7 @@ void start_curses(void)
     keypad(stdscr, TRUE);
     start_color();
     /* Standard colors */
-    init_pair(1, COLOR_WHITE, COLOR_BLUE);
+    init_pair(1, COLOR_BLACK, COLOR_BLUE);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
     init_pair(3, COLOR_RED, COLOR_BLACK);
     /* Highlighted colors */
@@ -31,10 +31,49 @@ void end_curses(void)
     return;
 }
 
+void set_color_on(double pchange, int highlight)
+{
+    if (pchange > 0)
+    {
+        if (!highlight)
+            attron(COLOR_PAIR(2));
+        else
+            attron(COLOR_PAIR(5));
+    }
+    else if (pchange < 0)
+    {
+        if (!highlight)
+            attron(COLOR_PAIR(3));
+        else
+            attron(COLOR_PAIR(6));
+    }
+    return;
+}
+
+void set_color_off(double pchange, int highlight)
+{
+    if (pchange > 0)
+    {
+        if (!highlight)
+            attroff(COLOR_PAIR(2));
+        else
+            attroff(COLOR_PAIR(5));
+    }
+    else if (pchange < 0)
+    {
+        if (!highlight)
+            attroff(COLOR_PAIR(3));
+        else
+            attroff(COLOR_PAIR(6));
+    }
+    return;
+}
+
 void print_header(int row, int col)
 {
     char msg[] = "STOCKTOP";
     mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
+    attron(COLOR_PAIR(1));
     mvprintw(
             row/2 + 1,
             col/2 - 95/2,
@@ -50,26 +89,14 @@ void print_header(int row, int col)
             "MARKETCAP",
             "52WKLO",
             "52WKHI");
+    attroff(COLOR_PAIR(1));
     return;
 }
 
 void print_stock(struct stock_data *stock, int line, int row, int col, int highlight)
 {
     char *volume, *volume_avg, *ebitda, *market_cap;
-    if (stock->change > 0)
-    {
-        if (!highlight)
-            attron(COLOR_PAIR(2));
-        else
-            attron(COLOR_PAIR(5));
-    }
-    else if (stock->change < 0)
-    {
-        if (!highlight)
-            attron(COLOR_PAIR(3));
-        else
-            attron(COLOR_PAIR(6));
-    }
+    set_color_on(stock->change_perc, highlight);
     // string conversion
     volume = double_to_ss(stock->volume);
     volume_avg = double_to_ss(stock->volume_avg);
@@ -94,23 +121,9 @@ void print_stock(struct stock_data *stock, int line, int row, int col, int highl
     free(volume_avg);
     free(ebitda);
     free(market_cap);
-    if (stock->change > 0)
-    {
-        if (!highlight)
-            attroff(COLOR_PAIR(2));
-        else
-            attroff(COLOR_PAIR(5));
-    }
-    else if (stock->change < 0)
-    {
-        if (!highlight)
-            attroff(COLOR_PAIR(3));
-        else
-            attroff(COLOR_PAIR(6));
-    }
+    set_color_off(stock->change_perc, highlight);
     return;
 }
-
 
 void draw (struct stock_data *stocks, int n, int currow)
 {
