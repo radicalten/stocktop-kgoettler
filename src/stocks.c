@@ -15,13 +15,15 @@ void start_curses(void)
     keypad(stdscr, TRUE);
     start_color();
     /* Standard colors */
-    init_pair(1, COLOR_BLACK, COLOR_BLUE);
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);
     init_pair(2, COLOR_GREEN, COLOR_BLACK);
     init_pair(3, COLOR_RED, COLOR_BLACK);
+    init_pair(4, COLOR_YELLOW, COLOR_BLACK);
     /* Highlighted colors */
-    init_pair(4, COLOR_BLUE, COLOR_WHITE);
-    init_pair(5, COLOR_BLACK, COLOR_GREEN);
-    init_pair(6, COLOR_BLACK, COLOR_RED);
+    init_pair(5, COLOR_WHITE, COLOR_BLUE);
+    init_pair(6, COLOR_BLACK, COLOR_GREEN);
+    init_pair(7, COLOR_BLACK, COLOR_RED);
+    init_pair(8, COLOR_BLACK, COLOR_YELLOW);
     return;
 }
 
@@ -33,38 +35,52 @@ void end_curses(void)
 
 void set_color_on(double pchange, int highlight)
 {
-    if (pchange > 0)
+    if (pchange > 0.5)
     {
         if (!highlight)
             attron(COLOR_PAIR(2));
         else
-            attron(COLOR_PAIR(5));
+            attron(COLOR_PAIR(6));
     }
-    else if (pchange < 0)
+    else if (pchange < -0.5)
     {
         if (!highlight)
             attron(COLOR_PAIR(3));
         else
-            attron(COLOR_PAIR(6));
+            attron(COLOR_PAIR(7));
+    }
+    else
+    {
+        if (!highlight)
+            attron(COLOR_PAIR(4));
+        else
+            attron(COLOR_PAIR(8));
     }
     return;
 }
 
 void set_color_off(double pchange, int highlight)
 {
-    if (pchange > 0)
+    if (pchange > 0.5)
     {
         if (!highlight)
             attroff(COLOR_PAIR(2));
         else
-            attroff(COLOR_PAIR(5));
+            attroff(COLOR_PAIR(6));
     }
-    else if (pchange < 0)
+    else if (pchange < -0.5)
     {
         if (!highlight)
             attroff(COLOR_PAIR(3));
         else
-            attroff(COLOR_PAIR(6));
+            attroff(COLOR_PAIR(7));
+    }
+    else
+    {
+        if (!highlight)
+            attroff(COLOR_PAIR(4));
+        else
+            attroff(COLOR_PAIR(8));
     }
     return;
 }
@@ -73,7 +89,7 @@ void print_header(int row, int col)
 {
     char msg[] = "STOCKTOP";
     mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
-    attron(COLOR_PAIR(1));
+    attron(COLOR_PAIR(5));
     mvprintw(
             row/2 + 1,
             col/2 - 95/2,
@@ -89,7 +105,7 @@ void print_header(int row, int col)
             "MARKETCAP",
             "52WKLO",
             "52WKHI");
-    attroff(COLOR_PAIR(1));
+    attroff(COLOR_PAIR(5));
     return;
 }
 
