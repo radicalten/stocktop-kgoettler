@@ -44,4 +44,5 @@ testcheck : $(BUILDDIR)/test.o
 	valgrind --leak-check=full $(BUILDDIR)/test.o
 
 $(BUILDDIR)/test.o: $(TESTDIR)/test.c $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o
-	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -lrt -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
+	#$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -lrt -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
+	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
