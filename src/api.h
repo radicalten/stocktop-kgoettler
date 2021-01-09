@@ -6,6 +6,11 @@
 
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
 
+struct stock_array {
+    struct stock_data *stocks;
+    int length;
+};
+
 struct stock_data {
     char symbol[24];
     char state[24];
