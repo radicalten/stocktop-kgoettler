@@ -89,7 +89,7 @@ void print_header(int row, int col)
 {
     char msg[] = "STOCKTOP";
     mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
-    attron(COLOR_PAIR(5));
+    //attron(COLOR_PAIR(5));
     mvprintw(
             row/2 + 1,
             col/2 - 95/2,
@@ -105,7 +105,7 @@ void print_header(int row, int col)
             "MARKETCAP",
             "52WKLO",
             "52WKHI");
-    attroff(COLOR_PAIR(5));
+    //attroff(COLOR_PAIR(5));
     return;
 }
 
