@@ -2,6 +2,7 @@
 #include <curl/curl.h>
 #include <json-c/json.h>
 #include "api.h"
+#include "rc.h"
 #include "stocks.h"
 #include "str.h"
 
@@ -65,6 +66,11 @@ START_TEST (test_print_stocks)
 }
 END_TEST
 
+START_TEST (test_read_rcfile)
+{
+    struct symbol_array *res = read_rcfile();
+}
+END_TEST
 /*
 START_TEST (test_parse_stocks)
 {
@@ -97,6 +103,7 @@ int main(void)
     tcase_add_test(tc1_1, test_build_query);
     tcase_add_test(tc1_1, test_fetch_stocks);
     tcase_add_test(tc1_1, test_print_stocks);
+    tcase_add_test(tc1_1, test_read_rcfile);
 
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);

@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include "api.h"
 #include "stocks.h"
 #include "str.h"

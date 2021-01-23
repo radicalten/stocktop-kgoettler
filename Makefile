@@ -14,14 +14,17 @@ BUILDDIR=build
 
 default: stocktop
 
-stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o $(LIBS) 
+stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o $(BUILDDIR)/rc.o
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/rc.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o $(LIBS) 
 
 $(BUILDDIR)/api.o:  $(SRCDIR)/api.c $(SRCDIR)/api.h
 	$(CC) $(CFLAGS) -c $(SRCDIR)/api.c -o $(BUILDDIR)/api.o
 
 $(BUILDDIR)/main.o: $(SRCDIR)/main.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/main.c -o $(BUILDDIR)/main.o
+
+$(BUILDDIR)/rc.o: $(SRCDIR)/rc.c $(SRCDIR)/rc.h
+	$(CC) $(CFLAGS) -c $(SRCDIR)/rc.c -o $(BUILDDIR)/rc.o
 
 $(BUILDDIR)/stocks.o:  $(SRCDIR)/stocks.c $(SRCDIR)/stocks.h $(BUILDDIR)/api.o $(BUILDDIR)/str.o
 	$(CC) $(CFLAGS) -c $(SRCDIR)/stocks.c -o $(BUILDDIR)/stocks.o
@@ -32,7 +35,7 @@ $(BUILDDIR)/str.o: $(SRCDIR)/str.c $(SRCDIR)/str.h
 clean: 
 	$(RM) stocktop $(SRCDIR)/*.o *~
 	$(RM) $(TESTDIR)/*.o
-	$(RM) $(BUILDDIR)/*
+	$(RM) -r $(BUILDDIR)/*
 
 memcheck: $(BUILDDIR)/stocktop
 	valgrind --leak-check=full $(BUILDDIR)/stocktop
@@ -43,6 +46,6 @@ test : $(BUILDDIR)/test.o
 testcheck : $(BUILDDIR)/test.o
 	valgrind --leak-check=full $(BUILDDIR)/test.o
 
-$(BUILDDIR)/test.o: $(TESTDIR)/test.c $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o
+$(BUILDDIR)/test.o: $(TESTDIR)/test.c $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o $(BUILDDIR)/rc.o
 	#$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -lrt -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
-	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
+	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/rc.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
