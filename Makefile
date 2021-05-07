@@ -15,22 +15,10 @@ BUILDDIR=build
 default: stocktop
 
 stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o $(BUILDDIR)/rc.o
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/rc.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o $(LIBS) 
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LIBS) 
 
-$(BUILDDIR)/api.o:  $(SRCDIR)/api.c $(SRCDIR)/api.h
-	$(CC) $(CFLAGS) -c $(SRCDIR)/api.c -o $(BUILDDIR)/api.o
-
-$(BUILDDIR)/main.o: $(SRCDIR)/main.c
-	$(CC) $(CFLAGS) -c $(SRCDIR)/main.c -o $(BUILDDIR)/main.o
-
-$(BUILDDIR)/rc.o: $(SRCDIR)/rc.c $(SRCDIR)/rc.h
-	$(CC) $(CFLAGS) -c $(SRCDIR)/rc.c -o $(BUILDDIR)/rc.o
-
-$(BUILDDIR)/stocks.o:  $(SRCDIR)/stocks.c $(SRCDIR)/stocks.h $(BUILDDIR)/api.o $(BUILDDIR)/str.o
-	$(CC) $(CFLAGS) -c $(SRCDIR)/stocks.c -o $(BUILDDIR)/stocks.o
-
-$(BUILDDIR)/str.o: $(SRCDIR)/str.c $(SRCDIR)/str.h
-	$(CC) $(CFLAGS) -c $(SRCDIR)/str.c -o $(BUILDDIR)/str.o
+$(BUILDDIR)/%.o : $(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean: 
 	$(RM) stocktop $(SRCDIR)/*.o *~
