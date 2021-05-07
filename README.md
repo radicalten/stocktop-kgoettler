@@ -1,5 +1,7 @@
 # stocktop
 
+![](./img/stocktop.png)
+
 A command-line utility for tracking stock prices based on `ncurses`.
 
 ## Dependencies
