@@ -34,6 +34,9 @@ int main (void)
                 if (currow > (nsymbols-1))
                     currow = nsymbols - 1;
                 break;
+            case ('r'):
+                free(stocks);
+                stocks = fetch_stocks(symbols->symbols, nsymbols);
             default:
                 break;
         }
