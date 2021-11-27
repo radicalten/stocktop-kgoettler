@@ -14,7 +14,7 @@ int main (void)
     /* Get data */
     struct symbol_array *symbols = read_rcfile();
     int nsymbols = symbols->len;
-    struct stock_data * stocks = fetch_stocks(symbols->symbols, nsymbols);
+    StockData *stocks = fetch_stocks(symbols->symbols, nsymbols);
     /* Start interactive curses session */
     start_curses();
     draw(stocks, nsymbols, 0);

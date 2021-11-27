@@ -130,7 +130,7 @@ void print_header(int row, int col)
     return;
 }
 
-void print_stock(struct stock_data *stock, int line, int row, int col, int highlight)
+void print_stock(StockData *stock, int line, int row, int col, int highlight)
 {
     char *volume, *volume_avg, *ebitda, *market_cap;
     // string conversion
@@ -175,7 +175,7 @@ void print_stock(struct stock_data *stock, int line, int row, int col, int highl
     return;
 }
 
-void draw (struct stock_data *stocks, int n, int currow)
+void draw (StockData *stocks, int n, int currow)
 {
     int row, col;
     getmaxyx(stdscr, row, col);

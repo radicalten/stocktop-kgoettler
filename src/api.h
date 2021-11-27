@@ -6,12 +6,13 @@
 
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
 
-struct stock_array {
-    struct stock_data *stocks;
+typedef struct StockDataArray {
+    struct StockData *stocks;
     int length;
-};
+    time_t refresh_time;
+} StockDataArray;
 
-struct stock_data {
+typedef struct StockData {
     char symbol[24];
     char state[24];
     int error;
@@ -25,7 +26,7 @@ struct stock_data {
     double market_cap;
     double fifty_two_week_low;
     double fifty_two_week_high;
-};
+} StockData;
 
 struct curl_fetch_st {
     char *payload;
@@ -38,7 +39,7 @@ struct curl_fetch_st {
  * \param symbols - array of stock symbols
  * \param nsymbols - number of symbols passed
  */
-struct stock_data* fetch_stocks(char **symbols, int nsymbols);
+struct StockData* fetch_stocks(char **symbols, int nsymbols);
 
 /**
  * Build full endpiont to use in cURL call
@@ -65,7 +66,7 @@ int query(char *url, json_object **json);
  * \param out - array of stock_data structs
  * \param len - number of stocks in JSON result (should match the length of out)
  */
-void parse_stocks(json_object *jobj, struct stock_data *out, int len);
+void parse_stocks(json_object *jobj, StockData *out, int len);
 
 
 /**
@@ -74,7 +75,7 @@ void parse_stocks(json_object *jobj, struct stock_data *out, int len);
  * \param jobj - JSON result from cURL call
  * \param out - stock_data struct in which to place output data
  */
-void parse_stock(json_object *jobj, struct stock_data *out);
+void parse_stock(json_object *jobj, StockData *out);
 
 /**
  * Callback for curl call

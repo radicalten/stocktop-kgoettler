@@ -3,7 +3,7 @@
 #include <string.h>
 #include "api.h"
 
-struct stock_data *fetch_stocks(char **symbols, int nsymbols)
+StockData *fetch_stocks(char **symbols, int nsymbols)
 {
     char *fields[19] = {
         "shortName",
@@ -36,7 +36,7 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
     query(url, pjson);
     
     /* Parse output */
-    struct stock_data *stocks = malloc(sizeof(struct stock_data) * nsymbols);
+    StockData *stocks = malloc(sizeof(StockData) * nsymbols);
     /* Insert stock symbols ahead of time */
     for (int i = 0; i < nsymbols; i++)
     {
@@ -89,7 +89,7 @@ char* build_endpoint(char **symbols, int nsymbols, char **fields, int nfields)
     return endpoint;
 }
 
-void parse_stocks(json_object *jobj, struct stock_data *out, int len)
+void parse_stocks(json_object *jobj, StockData *out, int len)
 {
     json_object * jsub;
     jsub = json_object_object_get(json_object_object_get(jobj, "quoteResponse"), "result");
@@ -98,7 +98,7 @@ void parse_stocks(json_object *jobj, struct stock_data *out, int len)
     return;
 }
 
-void parse_stock(json_object *jobj, struct stock_data *out)
+void parse_stock(json_object *jobj, StockData *out)
 {
     char *mstate, *symbol;
     double price, diff, percent, premc, postmc;
