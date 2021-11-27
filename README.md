@@ -24,7 +24,7 @@ $ make && build/stocktop
 - [x] Color highlighting
 - [x] Read/write stock symbols to rc file. Allow user to add/remove their own
   symbols
-- [ ] Handle mis-spelled or non-existent symbols that return no data (currently
+- [x] Handle mis-spelled or non-existent symbols that return no data (currently
   segfaults!)
 - [ ] Provide keystroke to refresh stock data
 - [ ] Allow user to sort by each field
