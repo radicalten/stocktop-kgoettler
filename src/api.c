@@ -37,6 +37,11 @@ struct stock_data *fetch_stocks(char **symbols, int nsymbols)
     
     /* Parse output */
     struct stock_data *stocks = malloc(sizeof(struct stock_data) * nsymbols);
+    /* Insert stock symbols ahead of time */
+    for (int i = 0; i < nsymbols; i++)
+    {
+        strcpy(stocks[i].symbol, symbols[i]);
+    }
     parse_stocks(json, stocks, nsymbols);
     json_object_put(json);
     
@@ -99,6 +104,13 @@ void parse_stock(json_object *jobj, struct stock_data *out)
     double price, diff, percent, premc, postmc;
     symbol = json_object_get_string(
             json_object_object_get(jobj, "symbol"));
+    // If symbol is NULL, then return
+    if (symbol == NULL)
+    {
+        out->error = 1;
+        return;
+    }
+    // Otherwise continue processing
     mstate = json_object_get_string(
             json_object_object_get(jobj, "marketState"));
     premc = json_object_get_double(
@@ -113,16 +125,6 @@ void parse_stock(json_object *jobj, struct stock_data *out)
         percent = json_object_get_double(
                 json_object_object_get(jobj, "preMarketChangePercent"));
     }
-    /*
-    else if (~strcmp(mstate, "REGULAR") && (postmc != 0))
-    {
-        price = json_object_get_double(
-                json_object_object_get(jobj, "postMarketPrice"));
-        diff = postmc;
-        percent = json_object_get_double(
-                json_object_object_get(jobj, "postMarketChangePercent"));
-    }
-    */
     else
     {
         price = json_object_get_double(
@@ -151,6 +153,7 @@ void parse_stock(json_object *jobj, struct stock_data *out)
             json_object_object_get(jobj, "fiftyTwoWeekLow"));
     out->fifty_two_week_high = json_object_get_double(
             json_object_object_get(jobj, "fiftyTwoWeekHigh"));
+    out->error = 0;
     return;
 }
 

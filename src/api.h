@@ -14,6 +14,7 @@ struct stock_array {
 struct stock_data {
     char symbol[24];
     char state[24];
+    int error;
     double open;
     double price;
     double change;
