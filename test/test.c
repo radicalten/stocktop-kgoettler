@@ -3,8 +3,8 @@
 #include <json-c/json.h>
 #include "api.h"
 #include "rc.h"
-#include "stocks.h"
 #include "str.h"
+#include "ui.h"
 
 START_TEST (test_query)
 {
@@ -32,7 +32,7 @@ END_TEST
 START_TEST (test_fetch_stocks)
 {
     struct stock_data *stocks;
-    char *SYMBOLS[3] = {"AAPL", "GOOG", "WORK"};
+    char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
     stocks = fetch_stocks(SYMBOLS, 3);
     for (int i = 0; i < 3; i++)
         printf("%s %s %lf %lf %lf\n", stocks[i].symbol, stocks[i].state, stocks[i].price, stocks[i].change, stocks[i].change_perc);
@@ -44,7 +44,7 @@ END_TEST
 START_TEST (test_print_stocks)
 {
     struct stock_data *stocks;
-    char *SYMBOLS[3] = {"AAPL", "GOOG", "WORK"};
+    char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
     stocks = fetch_stocks(SYMBOLS, 3);
     for (int i = 0; i < 3; i++) 
     {
@@ -71,25 +71,6 @@ START_TEST (test_read_rcfile)
     struct symbol_array *res = read_rcfile();
 }
 END_TEST
-/*
-START_TEST (test_parse_stocks)
-{
-    char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
-    char *FIELDS[3] = {"shortName", "symbol", "marketState"};
-    int res;
-    json_object *json;
-    json_object **pjson = &json;
-    char *url = build_endpoint(SYMBOLS, 3, FIELDS, 3);
-    res = query(url, pjson); 
-    struct stock_data stocks[3];
-    parse_stocks(json, stocks, 3);
-
-    for (int i = 0; i < 3; i++)
-        printf("%s %s %lf %lf %lf\n", stocks[i].symbol, stocks[i].state, stocks[i].price, stocks[i].change, stocks[i].change_perc);
-    free(url);
-}
-END_TEST
-*/
 
 int main(void)
 {
