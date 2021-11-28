@@ -70,6 +70,7 @@ END_TEST
 START_TEST (test_read_rcfile)
 {
     struct symbol_array *res = read_rcfile();
+    delete_symbol_array(res);
 }
 END_TEST
 
@@ -77,6 +78,9 @@ START_TEST (test_stockdataarray_create)
 {
     char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
     StockDataArray *data = StockDataArray_Create(SYMBOLS, 3);
+    StockDataArray_PrintSymbols(data);
+    StockDataArray_Append(data, "MSFT");
+    StockDataArray_PrintSymbols(data);
     StockDataArray_Delete(data);
 }
 END_TEST

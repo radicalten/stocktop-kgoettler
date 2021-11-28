@@ -43,5 +43,28 @@ void StockDataArray_Delete(StockDataArray *data)
 
 void StockDataArray_Append(StockDataArray *data, char *symbol)
 {
+    StockData *new = calloc(1, sizeof(StockData));
+    strcpy(new->symbol, symbol);
+    new->next = NULL;
+    
+    // Append it to the list
+    StockData *current = data->head;
+    while (current->next)
+    {
+        current = current->next;
+    }
+    current->next = new;
+    return;
+}
+
+void StockDataArray_PrintSymbols(StockDataArray *data)
+{
+    StockData *current = data->head;
+    while (current)
+    {
+        printf("%s ", current->symbol);
+        current = current->next;
+    }
+    printf("\n");
     return;
 }
