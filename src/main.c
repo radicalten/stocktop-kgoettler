@@ -7,6 +7,24 @@
 #include "ui.h"
 #include "str.h"
 
+int imin(int a, int b)
+{
+    if (a < b) 
+    {
+        return a;
+    }
+    return b;
+}
+
+int imax(int a, int b)
+{
+    if (a < b)
+    {
+        return b;
+    }
+    return a;
+}
+
 int main (void) 
 {
     int key;
@@ -14,6 +32,7 @@ int main (void)
     /* Get data */
     struct symbol_array *symbols = read_rcfile();
     int nsymbols = symbols->len;
+    //StockDataArray *data = StockDataArray_Create(symbols->symbols, nsymbols);
     StockData *stocks = fetch_stocks(symbols->symbols, nsymbols);
     /* Start interactive curses session */
     start_curses();
@@ -24,15 +43,11 @@ int main (void)
         {
             case ('k'):
             case (KEY_UP):
-                currow -= 1;
-                if (currow < 0)
-                    currow = 0;
+                currow = imax(currow - 1, 0);
                 break;
             case ('j'):
             case (KEY_DOWN):
-                currow += 1;
-                if (currow > (nsymbols-1))
-                    currow = nsymbols - 1;
+                currow = imin(currow + 1, nsymbols -1);
                 break;
             case ('r'):
                 free(stocks);
