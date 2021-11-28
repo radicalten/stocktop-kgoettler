@@ -175,17 +175,18 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight)
     return;
 }
 
-void draw (StockData *stocks, int n, int currow)
+void draw (StockDataArray *stocks, int currow)
 {
     int row, col;
     getmaxyx(stdscr, row, col);
     print_header(row, col);
-    for (int i = 0; i < n; i++)
+    int i = 0;
+    StockData *current = stocks->head;
+    while (current)
     {
-        if (i == currow)
-            print_stock(&stocks[i], i, row, col, 1);
-        else
-            print_stock(&stocks[i], i, row, col, 0);
+        print_stock(current, i, row, col, (i == currow) ? 1 : 0);
+        current = current->next;
+        i++;
     }
     return;
 }

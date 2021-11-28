@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "api.h"
+#include "stocks.h"
 #include "rc.h"
 #include "ui.h"
 #include "str.h"
@@ -32,11 +33,10 @@ int main (void)
     /* Get data */
     struct symbol_array *symbols = read_rcfile();
     int nsymbols = symbols->len;
-    //StockDataArray *data = StockDataArray_Create(symbols->symbols, nsymbols);
-    StockData *stocks = fetch_stocks(symbols->symbols, nsymbols);
+    StockDataArray *data = StockDataArray_Create(symbols->symbols, nsymbols);
     /* Start interactive curses session */
     start_curses();
-    draw(stocks, nsymbols, 0);
+    draw(data, 0);
     while ((key = getch()) != 'q')
     {
         switch (key)
@@ -50,14 +50,14 @@ int main (void)
                 currow = imin(currow + 1, nsymbols -1);
                 break;
             case ('r'):
-                free(stocks);
-                stocks = fetch_stocks(symbols->symbols, nsymbols);
+                // Update data
+                break;
             default:
                 break;
         }
         clear();
         /* Redraw */
-        draw(stocks, nsymbols, currow);
+        draw(data, currow);
     }
     end_curses();
     delete_symbol_array(symbols);

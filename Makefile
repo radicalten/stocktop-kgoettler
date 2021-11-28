@@ -14,7 +14,7 @@ BUILDDIR=build
 
 default: stocktop
 
-stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o
+stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o
 	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LIBS) 
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
@@ -36,4 +36,4 @@ testcheck : $(BUILDDIR)/test.o
 
 $(BUILDDIR)/test.o: $(TESTDIR)/test.c $(BUILDDIR)/api.o $(BUILDDIR)/ui.o $(BUILDDIR)/str.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o
 	#$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -lrt -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
-	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
+	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o -lcurses -lcurl -ljson-c -lm -lsubunit -o $(BUILDDIR)/test.o

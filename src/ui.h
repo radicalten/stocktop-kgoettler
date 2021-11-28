@@ -24,5 +24,5 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight);
 /**
  * Draw the stocktop table
  */
-void draw (StockData *stocks, int n, int currow);
+void draw (StockDataArray *stocks, int currow);
 #endif
