@@ -1,5 +1,5 @@
-#ifndef STOCKS_H_SEEN
-#define STOCKS_H_SEEN
+#ifndef UI_H_SEEN 
+#define UI_H_SEEN 
 
 /**
  * Start curses session
