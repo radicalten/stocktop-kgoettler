@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "api.h"
 #include "stocks.h"
 
 StockDataArray *StockDataArray_Create(char **symbols, int nsymbols)
@@ -26,6 +27,12 @@ StockDataArray *StockDataArray_Create(char **symbols, int nsymbols)
         current = next;
     }
     return out;
+}
+
+void StockDataArray_Query(StockDataArray *data)
+{
+    fetch_stocks(data);
+    return;
 }
 
 void StockDataArray_Delete(StockDataArray *data)

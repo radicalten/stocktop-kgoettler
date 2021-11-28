@@ -18,7 +18,7 @@ struct curl_fetch_st {
  * \param symbols - array of stock symbols
  * \param nsymbols - number of symbols passed
  */
-struct StockData* fetch_stocks(char **symbols, int nsymbols);
+void fetch_stocks(StockDataArray *data);
 
 /**
  * Build full endpiont to use in cURL call
@@ -45,7 +45,7 @@ int query(char *url, json_object **json);
  * \param out - array of stock_data structs
  * \param len - number of stocks in JSON result (should match the length of out)
  */
-void parse_stocks(json_object *jobj, StockData *out, int len);
+void parse_stocks(json_object *jobj, StockDataArray *data);
 
 
 /**

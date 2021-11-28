@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "api.h"
+#include "stocks.h"
 
-StockData *fetch_stocks(char **symbols, int nsymbols)
+void fetch_stocks(StockDataArray *data)
 {
     char *fields[19] = {
         "shortName",
@@ -31,23 +32,29 @@ StockData *fetch_stocks(char **symbols, int nsymbols)
     json_object *json;
     json_object **pjson = &json;
 
+    /* Get array of symbols */
+    char **symbols = malloc(sizeof(char *) * data->length);
+    StockData *current = data->head;
+    int i = 0;
+    while (current)
+    {
+        symbols[i] = current->symbol;
+        current = current->next;
+        i++;
+    }
+
     /* Build URL and perform query */
-    char *url = build_endpoint(symbols, nsymbols, fields, 19);
+    char *url = build_endpoint(symbols, data->length, fields, 19);
     query(url, pjson);
     
     /* Parse output */
-    StockData *stocks = malloc(sizeof(StockData) * nsymbols);
-    /* Insert stock symbols ahead of time */
-    for (int i = 0; i < nsymbols; i++)
-    {
-        strcpy(stocks[i].symbol, symbols[i]);
-    }
-    parse_stocks(json, stocks, nsymbols);
+    parse_stocks(json, data);
     json_object_put(json);
     
     /* Clean up */
+    free(symbols);
     free(url);
-    return stocks;
+    return;
 }
 
 char* build_endpoint(char **symbols, int nsymbols, char **fields, int nfields)
@@ -89,12 +96,38 @@ char* build_endpoint(char **symbols, int nsymbols, char **fields, int nfields)
     return endpoint;
 }
 
-void parse_stocks(json_object *jobj, StockData *out, int len)
+void parse_stocks(json_object *jobj, StockDataArray *data)
 {
     json_object * jsub;
+    unsigned int jsub_length;
+
+    // Get JSON result array and length
     jsub = json_object_object_get(json_object_object_get(jobj, "quoteResponse"), "result");
-    for (int i = 0; i < len; i++)
-        parse_stock(json_object_array_get_idx(jsub, i), &out[i]);
+    jsub_length = json_object_array_length(jsub);
+
+    // Loop over data 
+    StockData *current = data->head;
+    char *isymbol;
+    while (current)
+    {
+        // Find this stock in the JSON result array
+        int i = 0;
+        for (i = 0; i < jsub_length; i++) 
+        {
+            isymbol = json_object_get_string(json_object_object_get(json_object_array_get_idx(jsub, i), "symbol"));
+            if (strcmp(isymbol, current->symbol) == 0)
+                break;
+        }
+        if (i != jsub_length)
+        {
+            parse_stock(json_object_array_get_idx(jsub, i), current);
+        } 
+        else
+        {
+            current->error = 1;
+        }
+        current = current->next;
+    }
     return;
 }
 

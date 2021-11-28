@@ -25,6 +25,7 @@ typedef struct StockData {
 } StockData;
 
 StockDataArray *StockDataArray_Create(char **symbols, int nsymbols);
+void StockDataArray_Query(StockDataArray *data);
 void StockDataArray_Delete(StockDataArray *data);
 void StockDataArray_Append(StockDataArray *data, char *symbol);
 void StockDataArray_PrintSymbols(StockDataArray *data);

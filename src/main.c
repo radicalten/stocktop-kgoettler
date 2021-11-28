@@ -34,6 +34,7 @@ int main (void)
     struct symbol_array *symbols = read_rcfile();
     int nsymbols = symbols->len;
     StockDataArray *data = StockDataArray_Create(symbols->symbols, nsymbols);
+    StockDataArray_Query(data);
     /* Start interactive curses session */
     start_curses();
     draw(data, 0);
@@ -50,6 +51,7 @@ int main (void)
                 currow = imin(currow + 1, nsymbols -1);
                 break;
             case ('r'):
+                StockDataArray_Query(data);
                 // Update data
                 break;
             default:
@@ -61,6 +63,6 @@ int main (void)
     }
     end_curses();
     delete_symbol_array(symbols);
-    free(stocks);
+    StockDataArray_Delete(data);
     return 0;
 }
