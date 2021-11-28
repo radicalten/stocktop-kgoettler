@@ -16,8 +16,12 @@ StockDataArray *StockDataArray_Create(char **symbols, int nsymbols)
     StockData *next;
     for (int i = 1; i < nsymbols; i++)
     {
+        // Create the next element
         next = malloc(sizeof(StockData));
         strcpy(next->symbol, symbols[i]);
+        next->next = NULL;
+        
+        // Iterate
         current->next = next;
         current = next;
     }
