@@ -32,6 +32,14 @@ StockDataArray *StockDataArray_Create(char **symbols, int nsymbols)
 void StockDataArray_Query(StockDataArray *data)
 {
     fetch_stocks(data);
+    time(&data->refresh_time);
+    return;
+}
+
+void StockDataArray_GetRefreshTimeStr(StockDataArray *data, char *buf)
+{
+    struct tm * timeinfo = localtime(&data->refresh_time);
+    asctime_r(timeinfo, buf);
     return;
 }
 

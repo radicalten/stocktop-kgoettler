@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <time.h>
 #include "api.h"
 #include "str.h"
 #include "ui.h"
@@ -106,13 +107,15 @@ void set_color_error_off(int highlight)
     return;
 }
 
-void print_header(int row, int col)
+void print_header(StockDataArray *data, int row, int col)
 {
     char msg[] = "STOCKTOP";
+    char *refresh_time = malloc(40 * sizeof(char));
+    StockDataArray_GetRefreshTimeStr(data, refresh_time);
     mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
-    //attron(COLOR_PAIR(5));
+    mvprintw(row/2 + 1, (col-strlen(refresh_time))/2, "%s", refresh_time);
     mvprintw(
-            row/2 + 1,
+            row/2 + 2,
             col/2 - 95/2,
             "%-5s %8s %8s %8s %8s %8s %8s %8s %8s %8s %8s",
             "",
@@ -126,7 +129,6 @@ void print_header(int row, int col)
             "MARKETCAP",
             "52WKLO",
             "52WKHI");
-    //attroff(COLOR_PAIR(5));
     return;
 }
 
@@ -142,7 +144,7 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight)
         ebitda = double_to_ss(stock->ebitda);
         market_cap = double_to_ss(stock->market_cap); 
         mvprintw(
-                row/2 + line + 2,
+                row/2 + line + 3,
                 col/2 - 95/2,
                 "%-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s %9s %8.2f %8.2f",
                 stock->symbol,
@@ -166,7 +168,7 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight)
     {
         set_color_error_on(highlight);
         mvprintw(
-                row/2 + line + 2,
+                row/2 + line + 3,
                 col/2 - 95/2,
                 "%s is not a recognized stock symbol",
                 stock->symbol);
@@ -179,7 +181,7 @@ void draw (StockDataArray *stocks, int currow)
 {
     int row, col;
     getmaxyx(stdscr, row, col);
-    print_header(row, col);
+    print_header(stocks, row, col);
     int i = 0;
     StockData *current = stocks->head;
     while (current)

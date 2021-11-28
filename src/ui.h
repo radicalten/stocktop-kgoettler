@@ -14,7 +14,7 @@ void end_curses(void);
 /**
  * Print header line of table
  */
-void print_header(int row, int col);
+void print_header(StockDataArray *data, int row, int col);
 
 /**
  * Print a single stock to the table
