@@ -26,5 +26,5 @@ $ make && build/stocktop
   symbols
 - [x] Handle mis-spelled or non-existent symbols that return no data (currently
   segfaults!)
-- [ ] Provide keystroke to refresh stock data
+- [x] Provide keystroke to refresh stock data
 - [ ] Allow user to sort by each field

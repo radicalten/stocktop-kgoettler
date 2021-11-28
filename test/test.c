@@ -3,6 +3,7 @@
 #include <json-c/json.h>
 #include "api.h"
 #include "rc.h"
+#include "stocks.h"
 #include "str.h"
 #include "ui.h"
 
@@ -31,7 +32,7 @@ END_TEST
 
 START_TEST (test_fetch_stocks)
 {
-    struct stock_data *stocks;
+    StockData *stocks;
     char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
     stocks = fetch_stocks(SYMBOLS, 3);
     for (int i = 0; i < 3; i++)
@@ -43,7 +44,7 @@ END_TEST
 
 START_TEST (test_print_stocks)
 {
-    struct stock_data *stocks;
+    StockData *stocks;
     char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
     stocks = fetch_stocks(SYMBOLS, 3);
     for (int i = 0; i < 3; i++) 
@@ -72,6 +73,14 @@ START_TEST (test_read_rcfile)
 }
 END_TEST
 
+START_TEST (test_stockdataarray_create)
+{
+    char *SYMBOLS[3] = {"AAPL", "GOOG", "TSLA"};
+    StockDataArray *data = StockDataArray_Create(SYMBOLS, 3);
+    StockDataArray_Delete(data);
+}
+END_TEST
+
 int main(void)
 {
     Suite *s1 = suite_create("API");
@@ -85,6 +94,7 @@ int main(void)
     tcase_add_test(tc1_1, test_fetch_stocks);
     tcase_add_test(tc1_1, test_print_stocks);
     tcase_add_test(tc1_1, test_read_rcfile);
+    tcase_add_test(tc1_1, test_stockdataarray_create);
 
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);

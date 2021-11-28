@@ -3,30 +3,9 @@
 
 #include <json-c/json.h>
 #include <curl/curl.h>
+#include "stocks.h"
 
 #define BASE_URL "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com"
-
-typedef struct StockDataArray {
-    struct StockData *stocks;
-    int length;
-    time_t refresh_time;
-} StockDataArray;
-
-typedef struct StockData {
-    char symbol[24];
-    char state[24];
-    int error;
-    double open;
-    double price;
-    double change;
-    double change_perc;
-    double volume;
-    double volume_avg;
-    double ebitda;
-    double market_cap;
-    double fifty_two_week_low;
-    double fifty_two_week_high;
-} StockData;
 
 struct curl_fetch_st {
     char *payload;
