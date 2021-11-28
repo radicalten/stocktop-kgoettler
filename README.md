@@ -24,7 +24,7 @@ $ make && build/stocktop
 - [x] Color highlighting
 - [x] Read/write stock symbols to rc file. Allow user to add/remove their own
   symbols
-- [x] Handle mis-spelled or non-existent symbols that return no data (currently
-  segfaults!)
+- [x] Handle mis-spelled or non-existent symbols that return no data
 - [x] Provide keystroke to refresh stock data
 - [ ] Allow user to sort by each field
+- [ ] Make UI fill the space of the terminal window
