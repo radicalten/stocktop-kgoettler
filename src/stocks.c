@@ -7,27 +7,37 @@
 StockDataArray *StockDataArray_Create(char **symbols, int nsymbols)
 {
     StockDataArray *out = malloc(sizeof(StockDataArray));
+    out->head = malloc(sizeof(StockData));
+    strcpy(out->head->symbol, symbols[0]);
     out->length = nsymbols;
-    out->stocks = malloc(sizeof(StockData) * nsymbols);
-    for (int i = 0; i < nsymbols; i++)
+    
+    // Populate list
+    StockData *current = out->head;
+    StockData *next;
+    for (int i = 1; i < nsymbols; i++)
     {
-        strcpy(out->stocks[i].symbol, symbols[i]);
+        next = malloc(sizeof(StockData));
+        strcpy(next->symbol, symbols[i]);
+        current->next = next;
+        current = next;
     }
     return out;
 }
 
 void StockDataArray_Delete(StockDataArray *data)
 {
-    free(data->stocks);
+    StockData *next;
+    while (data->head)
+    {
+        next = data->head->next;
+        free(data->head);
+        data->head = next;
+    }
     free(data);
     return;
 }
 
-void StockDataArray_Add(StockDataArray *data, char *symbol)
+void StockDataArray_Append(StockDataArray *data, char *symbol)
 {
-    int cnt = data->length;
-    data->stocks = realloc(data->stocks, sizeof(StockData) * (cnt + 1));
-    data->length = cnt + 1;
-    strcpy(data->stocks[cnt].symbol, symbol);
     return;
 }

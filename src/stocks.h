@@ -2,12 +2,13 @@
 #define STOCKS_H_SEEN
 
 typedef struct StockDataArray {
-    struct StockData *stocks;
+    struct StockData *head;
     int length;
     time_t refresh_time;
 } StockDataArray;
 
 typedef struct StockData {
+    struct StockData *next;
     char symbol[24];
     char state[24];
     int error;
