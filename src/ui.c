@@ -10,6 +10,8 @@
 #include "str.h"
 #include "ui.h"
 
+#define MIN_COLS 96
+
 void start_curses(void)
 {
     /* Setup ncurses */
@@ -35,6 +37,28 @@ void end_curses(void)
 {
     endwin();
     return;
+}
+
+int check_term_cols(int cols)
+{
+    if (cols < MIN_COLS)
+        return 0;
+    return 1;
+}
+
+int floor_div(int a, int b)
+{
+    int d = a / b;
+    int r = a % b;  /* optimizes into single division. */
+    return r ? (d - ((a < 0) ^ (b < 0))) : d;
+}
+
+int get_spacing(int cols)
+{
+    int cols_left;
+    // Subtract the spacing of the columns themselves
+    cols_left = cols - 6 - 80;
+    return floor_div(cols_left, 10);
 }
 
 void set_color_on(double pchange, int highlight)
@@ -107,27 +131,55 @@ void set_color_error_off(int highlight)
     return;
 }
 
+void print_width_error(int row, int col)
+{
+    char msg[] = "Terminal size is too small. Resize to show stocktop.";
+    mvprintw(row/2, 0, "%s", msg);
+    return;
+}
+
 void print_header(StockDataArray *data, int row, int col)
 {
+    int spacing = get_spacing(col);
     char msg[] = "STOCKTOP";
     char *refresh_time = malloc(40 * sizeof(char));
     StockDataArray_GetRefreshTimeStr(data, refresh_time);
-    mvprintw(row/2, (col-strlen(msg))/2, "%s", msg);
-    mvprintw(row/2 + 1, (col-strlen(refresh_time))/2, "%s", refresh_time);
+    mvprintw(0, (col-strlen(msg))/2, "%s", msg);
+    mvprintw(0 + 1, (col-strlen(refresh_time))/2, "%s", refresh_time);
     mvprintw(
-            row/2 + 2,
-            col/2 - 95/2,
-            "%-5s %8s %8s %8s %8s %8s %8s %8s %8s %8s %8s",
+            0 + 2,
+            0,
+            "%-5s%*s%8s%*s%8s%*s%8s%*s%8s%*s%8s%*s%8s%*s%8s%*s%8s%*s%8s%*s%8s",
             "",
+            spacing,
+            " ",
             "OPEN",
+            spacing,
+            " ",
             "PRICE",
+            spacing,
+            " ",
             "CHANGE",
+            spacing,
+            " ",
             "CHANGE%",
+            spacing,
+            " ",
             "VOL",
+            spacing,
+            " ",
             "VOLAVG",
+            spacing,
+            " ",
             "EBITDA",
+            spacing,
+            " ",
             "MARKETCAP",
+            spacing,
+            " ",
             "52WKLO",
+            spacing,
+            " ",
             "52WKHI");
     return;
 }
@@ -135,6 +187,7 @@ void print_header(StockDataArray *data, int row, int col)
 void print_stock(StockData *stock, int line, int row, int col, int highlight)
 {
     char *volume, *volume_avg, *ebitda, *market_cap;
+    int spacing = get_spacing(col);
     // string conversion
     if (stock->error == 0)
     {
@@ -144,19 +197,39 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight)
         ebitda = double_to_ss(stock->ebitda);
         market_cap = double_to_ss(stock->market_cap); 
         mvprintw(
-                row/2 + line + 3,
-                col/2 - 95/2,
-                "%-5s %8.2f %8.2lf %8.2lf %8.2lf %8s %8s %8s %9s %8.2f %8.2f",
+                0 + line + 3,
+                0,
+                "%-5s%*s%8.2f%*s%8.2lf%*s%8.2lf%*s%8.2lf%*s%8s%*s%8s%*s%8s%*s%9s%*s%8.2f%*s%8.2f",
                 stock->symbol,
+                spacing,
+                " ",
                 stock->open,
+                spacing,
+                " ",
                 stock->price,
+                spacing,
+                " ",
                 stock->change,
+                spacing,
+                " ",
                 stock->change_perc,
+                spacing,
+                " ",
                 volume,
+                spacing,
+                " ",
                 volume_avg,
+                spacing,
+                " ",
                 ebitda,
+                spacing,
+                " ",
                 market_cap,
+                spacing,
+                " ",
                 stock->fifty_two_week_low,
+                spacing,
+                " ",
                 stock->fifty_two_week_high );
         free(volume);
         free(volume_avg);
@@ -168,8 +241,8 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight)
     {
         set_color_error_on(highlight);
         mvprintw(
-                row/2 + line + 3,
-                col/2 - 95/2,
+                0 + line + 3,
+                0,
                 "%s is not a recognized stock symbol",
                 stock->symbol);
         set_color_error_off(highlight);
@@ -181,6 +254,11 @@ void draw (StockDataArray *stocks, int currow)
 {
     int row, col;
     getmaxyx(stdscr, row, col);
+    if (!check_term_cols(col))
+    {
+        print_width_error(row, col);
+        return;
+    }
     print_header(stocks, row, col);
     int i = 0;
     StockData *current = stocks->head;
