@@ -1,15 +1,16 @@
 #ifndef RC_H_SEEN
 #define RC_H_SEEN
 
-struct symbol_array {
+typedef struct SymbolArray {
     char **symbols;
     int len;
-};
+} SymbolArray;
 
 
 char *get_rcfile(void);
 int create_rcfile(const char *rcfile);
-struct symbol_array *read_rcfile(void);
-void delete_symbol_array(struct symbol_array *symbols);
+
+SymbolArray *SymbolArray_FromFile(void);
+void SymbolArray_Delete(SymbolArray *symbols);
 
 #endif

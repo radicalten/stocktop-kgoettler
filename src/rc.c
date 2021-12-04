@@ -42,7 +42,7 @@ int create_rcfile(const char *rcfile)
     return 0;
 }
 
-struct symbol_array *read_rcfile(void)
+SymbolArray *SymbolArray_FromFile(void)
 {
     FILE *fp;
     char *rcfile;
@@ -78,7 +78,7 @@ struct symbol_array *read_rcfile(void)
         n += 1;
     }
     fclose(fp);
-    struct symbol_array *out = malloc(sizeof(struct symbol_array));
+    SymbolArray *out = malloc(sizeof(SymbolArray));
     out->symbols = symbols;
     out->len = n;
     /* Cleanup */
@@ -86,7 +86,7 @@ struct symbol_array *read_rcfile(void)
     return out;
 }
 
-void delete_symbol_array(struct symbol_array *symbols)
+void SymbolArray_Delete(SymbolArray *symbols)
 {
     for (int i = 0; i < symbols->len; i++)
     {

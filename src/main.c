@@ -32,7 +32,7 @@ int main (void)
     int key;
     StocktopState *state = StocktopState_Create();
     /* Get data */
-    struct symbol_array *symbols = read_rcfile();
+    SymbolArray *symbols = SymbolArray_FromFile();
     int nsymbols = symbols->len;
     StockDataArray *data = StockDataArray_Create(symbols->symbols, nsymbols);
     StockDataArray_Query(data);
@@ -69,7 +69,7 @@ int main (void)
         /* Redraw */
     }
     end_curses();
-    delete_symbol_array(symbols);
+    SymbolArray_Delete(symbols);
     StockDataArray_Delete(data);
     StocktopState_Delete(state);
     return 0;
