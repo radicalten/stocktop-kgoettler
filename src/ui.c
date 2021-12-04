@@ -7,6 +7,7 @@
 #include <pwd.h>
 #include <time.h>
 #include "api.h"
+#include "state.h"
 #include "str.h"
 #include "ui.h"
 
@@ -250,7 +251,7 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight)
     return;
 }
 
-void draw (StockDataArray *stocks, int currow)
+void draw (StockDataArray *stocks, StocktopState *state)
 {
     int row, col;
     getmaxyx(stdscr, row, col);
@@ -264,7 +265,25 @@ void draw (StockDataArray *stocks, int currow)
     StockData *current = stocks->head;
     while (current)
     {
-        print_stock(current, i, row, col, (i == currow) ? 1 : 0);
+        print_stock(current, i, row, col, (i == state->currow) ? 1 : 0);
+        current = current->next;
+        i++;
+    }
+    return;
+}
+
+void update(StockDataArray *stocks, StocktopState *state)
+{
+    int row, col;
+    int i = 0;
+    getmaxyx(stdscr, row, col);
+    StockData *current = stocks->head;
+    while (current)
+    {
+        if (i == state->prevrow || i == state->currow)
+        {
+            print_stock(current, i, row, col, (i == state->currow) ? 1 : 0);
+        }
         current = current->next;
         i++;
     }

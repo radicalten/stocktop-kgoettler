@@ -1,6 +1,8 @@
 #ifndef UI_H_SEEN 
 #define UI_H_SEEN 
 
+#include "state.h"
+
 /**
  * Start curses session
  */
@@ -24,5 +26,5 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight);
 /**
  * Draw the stocktop table
  */
-void draw (StockDataArray *stocks, int currow);
+void draw (StockDataArray *stocks, StocktopState *state);
 #endif

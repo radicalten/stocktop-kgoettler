@@ -7,6 +7,7 @@
 #include "rc.h"
 #include "ui.h"
 #include "str.h"
+#include "state.h"
 
 int imin(int a, int b)
 {
@@ -29,7 +30,7 @@ int imax(int a, int b)
 int main (void) 
 {
     int key;
-    int currow = 0;
+    StocktopState *state = StocktopState_Create();
     /* Get data */
     struct symbol_array *symbols = read_rcfile();
     int nsymbols = symbols->len;
@@ -37,29 +38,35 @@ int main (void)
     StockDataArray_Query(data);
     /* Start interactive curses session */
     start_curses();
-    draw(data, 0);
+    draw(data, state);
     while ((key = getch()) != 'q')
     {
         switch (key)
         {
             case ('k'):
             case (KEY_UP):
-                currow = imax(currow - 1, 0);
+                state->prevrow = state->currow;
+                state->currow = imax(state->currow - 1, 0);
+                update(data, state);
+                refresh();
                 break;
             case ('j'):
             case (KEY_DOWN):
-                currow = imin(currow + 1, nsymbols -1);
+                state->prevrow = state->currow;
+                state->currow = imin(state->currow + 1, nsymbols - 1);
+                update(data, state);
+                refresh();
                 break;
             case ('r'):
                 StockDataArray_Query(data);
+                clear();
+                draw(data, state);
                 // Update data
                 break;
             default:
                 break;
         }
-        clear();
         /* Redraw */
-        draw(data, currow);
     }
     end_curses();
     delete_symbol_array(symbols);

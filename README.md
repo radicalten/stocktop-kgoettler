@@ -27,4 +27,5 @@ $ make && build/stocktop
 - [x] Handle mis-spelled or non-existent symbols that return no data
 - [x] Provide keystroke to refresh stock data
 - [ ] Allow user to sort by each field
-- [ ] Make UI fill the space of the terminal window
+- [x] Make UI fill the space of the terminal window
+- [ ] Reduce screen flicker when updating UI

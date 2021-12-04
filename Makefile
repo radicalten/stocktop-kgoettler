@@ -14,7 +14,7 @@ BUILDDIR=build
 
 default: stocktop
 
-stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o
+stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
 	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LIBS) 
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
