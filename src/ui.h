@@ -27,4 +27,9 @@ void print_stock(StockData *stock, int line, int row, int col, int highlight);
  * Draw the stocktop table
  */
 void draw (StockDataArray *stocks, StocktopState *state);
+
+/**
+ * Update the stocktop table after a new selection
+ */
+void update(StockDataArray *stocks, StocktopState *state);
 #endif

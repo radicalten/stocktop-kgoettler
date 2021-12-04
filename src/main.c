@@ -71,5 +71,6 @@ int main (void)
     end_curses();
     delete_symbol_array(symbols);
     StockDataArray_Delete(data);
+    StocktopState_Delete(state);
     return 0;
 }
