@@ -28,4 +28,4 @@ $ make && build/stocktop
 - [x] Provide keystroke to refresh stock data
 - [ ] Allow user to sort by each field
 - [x] Make UI fill the space of the terminal window
-- [ ] Reduce screen flicker when updating UI
+- [x] Reduce screen flicker when updating UI
