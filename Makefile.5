@@ -10,7 +10,7 @@ LDFLAGS := $(CFLAGS) \
 -Wl,-rpath,/opt/homebrew/lib \
 -lcurses -lcurl -ljson-c -lm
 TARGET  := myapp
-SRCS    := $(wildcard src/*.c)
+SRCS    := $(wildcard src2/*.c)
 OBJS    := $(patsubst %.c,%.o,$(SRCS))
 all: $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) $(LDFLAGS) -o $(TARGET) 
