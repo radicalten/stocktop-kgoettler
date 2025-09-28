@@ -13,4 +13,4 @@ stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui
 	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS)
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) -c $< -o $(TARGET)
