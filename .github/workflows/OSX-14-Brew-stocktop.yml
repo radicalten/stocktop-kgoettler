@@ -14,7 +14,7 @@ jobs:
       uses: Homebrew/actions/setup-homebrew@master
     - name: Install stocktop Dependencies
       run: |
-        brew install json-c libncurses
+        brew install json-c ncurses
         # brew install gtk+3 json-glib glibc curl sqlite3
         # curl 8.16.0 is already installed and up-to-date.
         # sqlite 3.50.4 is already installed and up-to-date.
