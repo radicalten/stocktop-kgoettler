@@ -10,7 +10,5 @@ all: $(TARGET)
 $(TARGET):  
 	$(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui. $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
 
-	#$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS)
-
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
