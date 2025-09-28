@@ -11,22 +11,4 @@ stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui
 	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS) 
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-clean: 
-	$(RM) stocktop $(SRCDIR)/*.o *~
-	$(RM) $(TESTDIR)/*.o
-	$(RM) -r $(BUILDDIR)/*
-
-memcheck: $(BUILDDIR)/stocktop
-	valgrind --leak-check=full $(BUILDDIR)/stocktop
-
-test : $(BUILDDIR)/test.o
-	$(BUILDDIR)/test.o
-
-testcheck : $(BUILDDIR)/test.o
-	valgrind --leak-check=full $(BUILDDIR)/test.o
-
-$(BUILDDIR)/test.o: $(TESTDIR)/test.c $(BUILDDIR)/api.o $(BUILDDIR)/ui.o $(BUILDDIR)/str.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o
-	#$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -lrt -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/stocks.o $(BUILDDIR)/str.o -lcurses -lcurl -ljson-c -lm -o $(BUILDDIR)/test.o
-	$(CC) $(CFLAGS) $(TESTDIR)/test.c -lcheck -Isrc/ $(BUILDDIR)/api.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/str.o $(BUILDDIR)/stocks.o -lcurses -lcurl -ljson-c -lm -lsubunit -o $(BUILDDIR)/test.o
+	$(CC) $(CFLAGS) -c $< -o $(TARGET)
