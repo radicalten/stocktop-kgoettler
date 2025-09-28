@@ -1,6 +1,8 @@
 CC=cc
 CFLAGS=-g -Wall
-LIBS=-lcurses -lcurl -ljson-c -lm
+#LIBS=-lcurses -lcurl -ljson-c -lm
+LDFLAGS := $(CFLAGS) -I/opt/homebrew/include/SDL2 -L/opt/homebrew/lib -Wl,-rpath,/opt/homebrew/lib -lcurses -lcurl -ljson-c -lm
+TARGET  := myapp
 SRCDIR=src
 TESTDIR=test
 BUILDDIR=src
@@ -8,7 +10,7 @@ BUILDDIR=src
 default: stocktop
 
 stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LIBS) 
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS)
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
