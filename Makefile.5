@@ -16,3 +16,5 @@ all: $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) $(LDFLAGS) -o $(TARGET) 
   
 #Based off of Makefile.2, unfortunately that version compiled but had a segmentation fault
+# Was able to fix all compiler warnings by fixing api.c, (const char *), adding brew install ncurses to .yml, and 
+# updating this makefile.5, however it still had a segmentation fault, so I suppose this program doesn't work. 
