@@ -9,8 +9,7 @@ all: $(TARGET)
 
 $(TARGET):  
 	$(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui. $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
-
-$(CC) $(CFLAGS) -o $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $^ $(LDFLAGS)
 
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
