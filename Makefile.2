@@ -6,7 +6,7 @@ LDFLAGS := $(CFLAGS) \
 -I/opt/homebrew/include \
 -L/opt/homebrew/Cellar/json-c/0.18/lib \
 -L/opt/homebrew/opt/ncurses/lib \
--L/opt/homebrew/lib
+-L/opt/homebrew/lib \
 -Wl,-rpath,/opt/homebrew/lib \
 -lcurses -lcurl -ljson-c -lm
 TARGET  := myapp
