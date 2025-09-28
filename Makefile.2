@@ -1,7 +1,7 @@
 CC=cc
 CFLAGS=-g -Wall
 #LIBS=-lcurses -lcurl -ljson-c -lm
-LDFLAGS := $(CFLAGS) -I/opt/homebrew/include/SDL2 -L/opt/homebrew/lib -Wl,-rpath,/opt/homebrew/lib -lcurses -lcurl -ljson-c -lm
+LDFLAGS := $(CFLAGS) -I/opt/homebrew/include -L/opt/homebrew/lib -Wl,-rpath,/opt/homebrew/lib -lcurses -lcurl -ljson-c -lm
 TARGET  := myapp
 SRCDIR=src
 TESTDIR=test
