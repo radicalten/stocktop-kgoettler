@@ -1,7 +1,8 @@
 CC		:= cc
 CFLAGS 	:= -O3 -flto
 LDFLAGS := $(CFLAGS) \
--I/opt/homebrew/Cellar/json-c/0.18/include -L/opt/homebrew/Cellar/json-c/0.18/lib \
+-I/opt/homebrew/Cellar/json-c/0.18/include \
+-L/opt/homebrew/Cellar/json-c/0.18/lib \
 -lcurses -lcurl -ljson-c -lm
 TARGET  := myapp
 SRCS    := $(wildcard src/*.c)
