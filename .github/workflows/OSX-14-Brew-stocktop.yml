@@ -21,7 +21,7 @@ jobs:
         # glibc: Linux is required for this software.
     - name: Compile
       run: |
-        make -f Makefile
+        make -f Makefile.2
     - name: Create tarball
       run: |
         tar -cvf myapp.tgz myapp
