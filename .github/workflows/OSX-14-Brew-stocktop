@@ -19,6 +19,7 @@ jobs:
         # curl 8.16.0 is already installed and up-to-date.
         # sqlite 3.50.4 is already installed and up-to-date.
         # glibc: Linux is required for this software.
+        #
     - name: Compile
       run: |
         make -f Makefile
