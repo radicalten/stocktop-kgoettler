@@ -2,20 +2,7 @@ CC		:= cc
 CFLAGS 	:= -O3 -flto
 LDFLAGS := $(CFLAGS) -I/opt/homebrew/include -L/opt/homebrew/lib -Wl,-rpath,/opthomebrew/lib -lcurses -lcurl -ljson-c -lm
 TARGET  := myapp
-SRCS    := $(wildcard src/*.c)
+SRCS    := $(wildcard src2/*.c)
 OBJS    := $(patsubst %.c,%.o,$(SRCS))
 all: $(OBJS)
 	$(CC) $(OBJS) $(CFLAGS) $(LDFLAGS) -o $(TARGET) 
-
-#SRCDIR=src
-#TESTDIR=test
-#BUILDDIR=src
-
-#default: stocktop
-
-#stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o #$(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
-
-	#$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS)
-
-#$(BUILDDIR)/%.o : $(SRCDIR)/%.c
-	#$(CC) $(CFLAGS) -c $< -o $@
