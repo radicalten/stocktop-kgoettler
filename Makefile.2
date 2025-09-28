@@ -1,5 +1,5 @@
 CC=cc
-CFLAGS=-g -Wall
+CFLAGS 	:= -O3 -flto
 LDFLAGS := $(CFLAGS) -I/opt/homebrew/include -L/opt/homebrew/lib -Wl,-rpath,/opt/homebrew/lib -lcurses -lcurl -ljson-c -lm
 TARGET  := myapp
 SRCS    := $(wildcard c8c-mod/*.c)
