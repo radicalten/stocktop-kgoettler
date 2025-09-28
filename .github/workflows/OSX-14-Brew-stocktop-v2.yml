@@ -14,7 +14,7 @@ jobs:
       uses: Homebrew/actions/setup-homebrew@master
     - name: Install stocktop Dependencies
       run: |
-        brew install json-c
+        brew install json-c ncurses
         # brew list json-c
     - name: Compile
       run: |
