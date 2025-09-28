@@ -107,7 +107,7 @@ void parse_stocks(json_object *jobj, StockDataArray *data)
 
     // Loop over data 
     StockData *current = data->head;
-    char *isymbol;
+    const char *isymbol;
     while (current)
     {
         // Find this stock in the JSON result array
