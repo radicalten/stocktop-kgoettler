@@ -1,9 +1,9 @@
 CC		:= cc
-CFLAGS 	:= -O3 -flto
-LDFLAGS := $(CFLAGS) \
--I/opt/homebrew/Cellar/json-c/0.18/include/json-c \
+INCLUDES	:= -I/opt/homebrew/Cellar/json-c/0.18/include/json-c \
 -I/opt/homebrew/opt/ncurses/include \
 -I/opt/homebrew/include \
+CFLAGS 	:= -O3 -flto $(INCLUDES)
+LDFLAGS := $(CFLAGS) \
 -L/opt/homebrew/Cellar/json-c/0.18/lib \
 -L/opt/homebrew/opt/ncurses/lib \
 -L/opt/homebrew/lib \
