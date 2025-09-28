@@ -10,5 +10,8 @@ all: $(TARGET)
 $(TARGET):  
 	$(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui. $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
 
-$(BUILDDIR)/%.o : $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+%.o: %.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+	
+#$(BUILDDIR)/%.o : $(SRCDIR)/%.c
+	#$(CC) $(CFLAGS) -c $< -o $@
