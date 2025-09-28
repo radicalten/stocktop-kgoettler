@@ -8,7 +8,7 @@ BUILDDIR=src
 
 default: myapp
 
-stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
+myapp:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
 	$(CC) $(CFLAGS) -o $(BUILDDIR)/myapp $^ $(LDFLAGS) 
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
