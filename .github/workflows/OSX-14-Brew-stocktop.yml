@@ -15,8 +15,7 @@ jobs:
     - name: Install stocktop Dependencies
       run: |
         brew install json-c 
-        brew info json-c
-        brew info ncurses
+        brew list json-c
         # brew install json-c ncurses
         # brew install gtk+3 json-glib glibc curl sqlite3
         # curl 8.16.0 is already installed and up-to-date.
