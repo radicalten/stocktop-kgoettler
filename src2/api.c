@@ -133,7 +133,7 @@ void parse_stocks(json_object *jobj, StockDataArray *data)
 
 void parse_stock(json_object *jobj, StockData *out)
 {
-    char *mstate, *symbol;
+    const char *mstate, *symbol;
     double price, diff, percent, premc, postmc;
     symbol = json_object_get_string(
             json_object_object_get(jobj, "symbol"));
