@@ -1,14 +1,15 @@
 CC=gcc
 CFLAGS := -O3 -flto
 LDFLAGS := $(CFLAGS) -I/opt/homebrew/include -L/opt/homebrew/lib -Wl,-rpath,/opthomebrew/lib -lcurses -lcurl -ljson-c -lm
+TARGET=myapp
 SRCDIR=src
 TESTDIR=test
 BUILDDIR=src
 
-default: stocktop
+default: myapp
 
 stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS) 
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/myapp $^ $(LDFLAGS) 
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $(TARGET)
