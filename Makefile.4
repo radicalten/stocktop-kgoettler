@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS := -O3 -flto
-LIBS=-lcurses -lcurl -ljson-c -lm
+LDFLAGS := -I/opt/homebrew/include -L/opt/homebrew/lib -Wl,-rpath,/opthomebrew/lib -lcurses -lcurl -ljson-c -lm
 SRCDIR=src
 TESTDIR=test
 BUILDDIR=build
@@ -8,7 +8,7 @@ BUILDDIR=build
 default: stocktop
 
 stocktop:  $(BUILDDIR)/api.o $(BUILDDIR)/main.o $(BUILDDIR)/str.o $(BUILDDIR)/ui.o $(BUILDDIR)/rc.o $(BUILDDIR)/stocks.o $(BUILDDIR)/state.o
-	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LIBS) 
+	$(CC) $(CFLAGS) -o $(BUILDDIR)/stocktop $^ $(LDFLAGS) 
 
 $(BUILDDIR)/%.o : $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
